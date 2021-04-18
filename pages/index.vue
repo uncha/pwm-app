@@ -1,0 +1,53 @@
+<template>
+  <div class="container">
+      <p class="title text-center"><nuxt-link :to="{path:'/login'}"><img src="/images/title-image.png" /></nuxt-link></p>
+
+      <div class="social text-center">
+          <!-- <kakao-login class="mt-1" /> -->
+          <naver-login class="mt-1" />
+          <!-- <google-login /> -->
+          <!-- <apple-login class="mt-1" /> -->
+      </div>
+  </div>
+</template>
+
+<script>
+import KakaoLogin from "@/components/login/KakaoLogin.vue";
+//import GoogleLogin from "@/components/login/GoogleLogin.vue";
+import NaverLogin from "@/components/login/NaverLogin.vue";
+import AppleLogin from "@/components/login/AppleLogin.vue";
+
+export default {
+    components: {
+      KakaoLogin,
+      //GoogleLogin,
+      NaverLogin,
+      AppleLogin,
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+@import "~@/assets/scss/common.scss";
+
+.title {
+    margin-top:rem(177px);
+
+    img {
+        width: rem(226px);
+    }
+}
+
+.main_img {
+    img {
+        width: rem(157px);
+    }
+}
+
+.social {
+    position: absolute;
+    bottom:rem(80px);
+    left:0;
+    right:0;
+}
+</style>

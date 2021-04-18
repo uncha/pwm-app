@@ -1,0 +1,34 @@
+{
+  "name": "pwm-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.13.0",
+    "bootstrap": "^4.6.0",
+    "bootstrap-vue": "^2.21.2",
+    "core-js": "^3.8.3",
+    "jQuery": "^1.7.4",
+    "jsdom": "^16.4.0",
+    "location": "^0.0.1",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "navigator": "^1.0.1",
+    "nuxt": "^2.14.12",
+    "swiper": "^6.4.11",
+    "vue-loader": "^15.9.6",
+    "vue-style-loader": "^4.1.2",
+    "vuelidate": "^0.7.6",
+    "vuex-persistedstate": "^4.0.0-beta.3",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+    "node-sass": "^4.14.1",
+    "sass-loader": "^7.3.1"
+  }
+}
