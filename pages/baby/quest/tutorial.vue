@@ -66,7 +66,7 @@ import Top from '@/components/baby/top'
       },
       giftImageURL () {
           if(window.location.host == 'localhost:3000') {
-            return `http://localhost:8001${this.questGroup.success_gift}`
+            return `http://localhost:9102${this.questGroup.success_gift}`
           } else {
             return this.questGroup.success_gift
           }
@@ -131,7 +131,7 @@ import Top from '@/components/baby/top'
 
 .btn-create-quest {
   position: absolute;
-  bottom:rem(80px);
+  bottom:rem(120px);
   display: block;
   text-align: center;
   width: rem(234px);

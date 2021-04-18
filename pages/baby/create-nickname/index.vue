@@ -85,7 +85,7 @@
             },
             profileImageURL () {
                 if(window.location.host == 'localhost:3000') {
-                  return `http://localhost:8001${this.uploadImage}`
+                  return `http://localhost:9102${this.uploadImage}`
                 } else {
                   return this.uploadImage
                 }

@@ -36,6 +36,10 @@ export default {
       //   type: "text/javascript",
       //   src: "https://apis.google.com/js/platform.js?onload=renderButton",
       // },
+      {
+        type: "text/javascript",
+        src: "https://code.jquery.com/jquery-2.2.4.js",
+      },
     ],
   },
 

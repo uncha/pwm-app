@@ -47,7 +47,7 @@
             this.options.push({key:`key-${this.cnt}`, value:''})
         },
         removeOption () {
-            this.options.unshift()
+            this.options.pop()
             this.$emit('input', this.selected)
         },
     }

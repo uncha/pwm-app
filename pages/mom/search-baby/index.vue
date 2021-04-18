@@ -80,7 +80,7 @@
                 if(!this.searchBaby) return ''
 
                 if(window.location.host == 'localhost:3000') {
-                  return `http://localhost:8001${this.searchBaby[0].profile_image}`
+                  return `http://localhost:9102${this.searchBaby[0].profile_image}`
                 } else {
                   return this.uploadImage
                 }

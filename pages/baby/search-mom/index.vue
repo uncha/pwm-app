@@ -50,7 +50,7 @@
         </p>
       </div>
 
-      <b-modal ref="linked-mom-modal" hide-header hide-footer centered  :no-close-on-backdrop="true">
+      <b-modal id="linked-mom-modal" ref="linked-mom-modal" hide-header hide-footer centered  :no-close-on-backdrop="true">
         <template v-if="linkedStay.length > 0">
           <div class="text-center">
             <p class="upload-image">
@@ -63,11 +63,11 @@
           </div>
           <b-row>
             <b-col class="p-2">
-              <b-button variant="primary" @click="yes">네</b-button>
-            </b-col>
-            <b-col class="p-2">
               <b-button variant="light" @click="no">아니오</b-button>
             </b-col>
+              <b-col class="p-2">
+                <b-button variant="primary" @click="yes">네</b-button>
+              </b-col>
           </b-row>
         </template>
         <template v-else>
@@ -114,7 +114,7 @@ import LinkedMom from '@/components/baby/linked-mom'
       },
       profileImageURL () {
           if(window.location.host == 'localhost:3000') {
-            return `http://localhost:8001${this.mom.profile_image}`
+            return `http://localhost:9102${this.mom.profile_image}`
           } else {
             return this.mom.profile_image
           }
@@ -226,10 +226,11 @@ import LinkedMom from '@/components/baby/linked-mom'
 }
 
 .title {
-  margin-top: rem(100px);
+  margin-top: rem(30px);
   font-size:rem(32px);
   line-height: rem(44px);
   position: relative;
+  margin-bottom: rem(60px);
 
   .title-img {
     position: absolute;
@@ -333,5 +334,25 @@ import LinkedMom from '@/components/baby/linked-mom'
 
 .stay-quest-box {
 
+}
+</style>
+
+<style lang="scss">
+@import "~@/assets/scss/common.scss";
+#linked-mom-modal{
+  .upload-image {
+      width: rem(100px);
+      height: rem(100px);
+      background: #f1cef5;
+      border-radius: 100%;
+      overflow: hidden;
+      z-index:5;
+      margin::0 auto;
+
+      img {
+          width:100%;
+          height: 100%;
+      }
+  }
 }
 </style>

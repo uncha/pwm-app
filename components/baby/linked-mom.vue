@@ -48,7 +48,7 @@
      },
      profileImageURL () {
          if(window.location.host == 'localhost:3000') {
-           return `http://localhost:8001${this.mom.profile_image}`
+           return `http://localhost:9102${this.mom.profile_image}`
          } else {
            return this.mom.profile_image
          }
@@ -78,7 +78,7 @@
      },
      getProfileImageURL (url) {
          if(window.location.host == 'localhost:3000') {
-           return `http://localhost:8001${url}`
+           return `http://localhost:9102${url}`
          } else {
            return url
          }

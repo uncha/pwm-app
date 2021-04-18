@@ -9,11 +9,11 @@
           시작됐어요!
         </p>
         <img src="/images/img_quest_box.png" style="width:182px" />
-        <p class="description" style="margin-top:-40px">어떤 퀘스트가 도착했는지 확인해볼까요?</p>
+        <p class="description" style="margin-top:-60px">어떤 퀘스트가 도착했는지 확인해볼까요?</p>
       </div>
     </div>
     <b-row>
-      <b-col class="p-2 mt-5 mb-5">
+      <b-col class="p-2 mt-2 mb-5">
         <b-button variant="primary" @click="onStart">퀘스트 시작하기</b-button>
       </b-col>
     </b-row>

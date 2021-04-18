@@ -128,14 +128,14 @@
           },
           giftImageURL () {
               if(window.location.host == 'localhost:3000') {
-                return `http://localhost:8001${this.selectGroup.success_gift}`
+                return `http://localhost:9102${this.selectGroup.success_gift}`
               } else {
                 return this.uploadImage
               }
           },
           confirmDataImageURL () {
               if(window.location.host == 'localhost:3000') {
-                return `http://localhost:8001${this.confirmData.execution_pic}`
+                return `http://localhost:9102${this.confirmData.execution_pic}`
               } else {
                 return this.confirmData.execution_pic
               }
@@ -271,7 +271,7 @@
             },
             executionPicURL (url) {
               if(window.location.host == 'localhost:3000') {
-                return `http://localhost:8001${url}`
+                return `http://localhost:9102${url}`
               } else {
                 return url
               }

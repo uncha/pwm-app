@@ -22,6 +22,15 @@ export default {
         window._ = _
         window.moment = moment
     },
+    watch: {
+      '$route.path' () {
+        if(this.$route.path == '/baby/quest/complete' || this.$route.path == '/mom/quest/ing/complete') {
+          $('html').addClass('pollen')
+        } else {
+          $('html').removeClass('pollen')
+        }
+      },
+    },
 }
 </script>
 
@@ -64,10 +73,16 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+
+  &.pollen {
+    background: url('/images/img_pollen.png');
+    background-size: contain;
+  }
 }
 
 body {
     font-family:'NotoSansCJKkr-Medium';
+    background: transparent;
 }
 
 *,

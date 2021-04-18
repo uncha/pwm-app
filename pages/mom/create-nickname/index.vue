@@ -35,7 +35,7 @@
                             <template v-if="confirmed==false">
                                 <p class="des text-danger">사용불가
                                 </p>
-                                <b-button class="position-bottom" type="submit">확인</b-button>
+                                <b-button class="position-bottom" type="submit" variant="primary">확인</b-button>
                             </template>
                             <template v-else>
                                 <p class="des" style="color:#1773e2">사용가능
@@ -88,7 +88,7 @@
             },
             profileImageURL () {
                 if(window.location.host == 'localhost:3000') {
-                  return `http://localhost:8001${this.uploadImage}`
+                  return `http://localhost:9102${this.uploadImage}`
                 } else {
                   return this.uploadImage
                 }
