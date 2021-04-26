@@ -117,6 +117,7 @@
                 confirmQuest:'',
                 links:[],
                 confirmData:'',
+                intervalId:'',
             }
         },
         computed: {
@@ -130,7 +131,7 @@
               if(window.location.host == 'localhost:3000') {
                 return `http://localhost:9102${this.selectGroup.success_gift}`
               } else {
-                return this.uploadImage
+                return this.selectGroup.success_gift
               }
           },
           confirmDataImageURL () {
@@ -179,23 +180,30 @@
             return id == this.selectGroup.success_count ? id : -1
           },
         },
-        async fetch() {
-            let selectGroup = await this.loadSelectGroup(this.selectLink)
-            this.selectGroup = selectGroup[0]
-            this.questList = await this.loadQuestList(this.selectGroup)
+        mounted () {
+          this.init()
 
-            await this.$axios.get(`/api/linked/mom`, {
-              params:{
-                mom_nick_name:this.authUser
-              }
-            }).then(res=>{
-              this.links = res.data
-              console.log('RES.DATA4444', res)
-
-              this.completeCheck()
-            })
+          this.intervalId = setInterval(()=>{
+            this.init()
+          }, 1000 * 30)
         },
         methods: {
+            async init () {
+              let selectGroup = await this.loadSelectGroup(this.selectLink)
+              this.selectGroup = selectGroup[0]
+              this.questList = await this.loadQuestList(this.selectGroup)
+
+              await this.$axios.get(`/api/linked/mom`, {
+                params:{
+                  mom_nick_name:this.authUser
+                }
+              }).then(res=>{
+                this.links = res.data
+                console.log('RES.DATA4444', res)
+
+                this.completeCheck()
+              })
+            },
             questConfirm (questId, confirmData) {
                 this.confirmQuest = _.find(this.questList, item=>{
                   return item.id == questId
@@ -295,6 +303,9 @@
                 this.$router.push({path:'/mom/quest/ing/complete'})
               })
             },
+        },
+        destroyed () {
+          this.clearInterval(this.intervalId)
         },
     }
 </script>

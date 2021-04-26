@@ -1,7 +1,6 @@
 <template>
     <div>
         <top></top>
-        authUser = {{authUser}}
         <div class="">
             <p class="text-center title">자녀의 닉네임을<br />입력해주세요.
             </p>
@@ -82,7 +81,7 @@
                 if(window.location.host == 'localhost:3000') {
                   return `http://localhost:9102${this.searchBaby[0].profile_image}`
                 } else {
-                  return this.uploadImage
+                  return this.searchBaby[0].profile_image
                 }
             },
         },
@@ -98,7 +97,7 @@
                 }
 
                 this.$axios.get(`/api/search-baby/${this.authUser}/${this.form.nickName}`).then(res=>{
-                    console.log('RES.DATA', res.data)
+                    console.log('RES.DATA@@@@', res.data)
                     if(res.data.length == 0){
                         this.searchFailed = true
                     } else {
