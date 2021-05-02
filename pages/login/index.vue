@@ -3,13 +3,11 @@
         <div class="text-center"><Logo /></div>
 
         <div class="text-center mt-4">
-            <b-form @submit.stop.prevent="onSubmit">
-                <b-form-group :label="'카카오 아이디'" :label-cols="2">
-                    <b-input :state="validateState('kakaoId')" v-model="$v.form.kakaoId.$model" />
-                    <b-form-invalid-feedback>아이디를 입력해 주세요.</b-form-invalid-feedback>
-                </b-form-group>
-                <b-button type="submit" class="w-100">카카오톡으로 시작하기</b-button>
-            </b-form>
+            <b-form-group :label="'카카오 아이디'" :label-cols="2">
+                <b-input :state="validateState('kakaoId')" v-model="$v.form.kakaoId.$model" />
+                <b-form-invalid-feedback>아이디를 입력해 주세요.</b-form-invalid-feedback>
+            </b-form-group>
+            <b-button type="submit" class="w-100">카카오톡으로 시작하기</b-button>
         </div>
     </div>
 </template>

@@ -110,6 +110,14 @@ input[type="text"] {
     color:#000;
 }
 
+input[type="password"] {
+    border:0;
+    border-bottom: 2px solid #000;
+    border-radius: 0;
+    font-size: rem(18px);
+    color:#000;
+}
+
 %button {
     width:100%;
     height: rem(56px);
