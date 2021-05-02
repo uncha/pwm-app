@@ -57,7 +57,7 @@
     import LoginCheck from '@/mixins/loginCheck.js'
     import LinkedBabies from '@/components/mom/quest/linked-babies'
     import SideBar from '@/components/mom/side-bar'
-    
+
     export default {
       mixins:[LoginCheck],
       components: {
@@ -90,7 +90,7 @@
       mounted () {
         this.intervalId = window.setInterval(()=>{
           this.$fetch()
-        }, 1000 * 60)
+        }, 1000 * 30)
       },
       methods: {
         async onSelectLink (link) {

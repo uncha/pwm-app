@@ -32,7 +32,7 @@
           console.log('???')
           return `http://localhost:9102${this.questGroup[0].success_gift}`
         } else {
-          return this.questGroup.success_gift
+          return this.questGroup[0].success_gift
         }
       },
     },

@@ -41,7 +41,7 @@ export default {
         if(window.location.host == 'localhost:3000') {
           return `http://localhost:9102${this.selectGroup.success_gift}`
         } else {
-          return this.uploadImage
+          return this.selectGroup.success_gift
         }
     },
   },

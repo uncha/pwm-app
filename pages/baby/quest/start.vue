@@ -30,13 +30,15 @@
       return {
         linked:[],
         questGroup:'',
+        intervalId:'',
       }
     },
-    async mounted () {
-      this.linked = await this.loadData()
-      this.questGroup = await this.loadQuestGroup()
+    mounted () {
+      this.init()
 
-      this.$store.commit('Baby/setLinked', this.linked)
+      this.intervalId = setInterval(()=>{
+        this.init()
+      }, 1000 * 30)
     },
     computed: {
       authUser () {
@@ -44,6 +46,12 @@
       },
     },
     methods: {
+      async init () {
+        this.linked = await this.loadData()
+        this.questGroup = await this.loadQuestGroup()
+
+        this.$store.commit('Baby/setLinked', this.linked)
+      },
       loadData () {
         return new Promise(resolve=>{
           this.$axios.get(`/api/linked/baby`, {
@@ -73,7 +81,10 @@
           }
         }
       },
-    }
+    },
+    destroyed () {
+      window.clearInterval(this.intervalId)
+    },
   }
 </script>
 

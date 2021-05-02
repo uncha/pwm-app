@@ -139,7 +139,7 @@ import LinkedMom from '@/components/baby/linked-mom'
 
       this.intervalId = window.setInterval(()=>{
         this.init()
-      }, 1000 * 60)
+      }, 1000 * 30)
     },
     methods: {
       async init () {
