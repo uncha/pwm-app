@@ -18,7 +18,7 @@
       <div class="profile-image-wrapper">
           <div class="box-file-input"><label>
               <b-form-group :label="''">
-                  <b-form-file @change="onUploadImage" accept="video/*;capture=camcorder" v-model="form.profile_image" class="mt-3" plain></b-form-file>
+                  <b-form-file @change="onUploadImage" accept="image/jpeg, image/png, image/gif" v-model="form.profile_image" class="mt-3" plain></b-form-file>
               </b-form-group>
           </label>
           <p>

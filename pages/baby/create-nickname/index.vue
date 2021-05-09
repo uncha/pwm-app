@@ -7,12 +7,13 @@
                     <div class="profile-image-wrapper">
                         <p class="upload-image">
                             <template v-if="uploadImage">
+                                v1
                                 <img :src="profileImageURL" />
                             </template>
                         </p>
                         <div class="box-file-input"><label>
                             <b-form-group :label="''">
-                                <b-form-file @change="onUploadImage" accept="video/*;capture=camcorder" v-model="form.profile_image" class="mt-3" plain></b-form-file>
+                                <b-form-file @change="onUploadImage" accept="image/*;capture=camcorder" v-model="form.profile_image" class="mt-3" plain></b-form-file>
                             </b-form-group>
                         </label></div>
                     </div>
