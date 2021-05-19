@@ -2,7 +2,9 @@
     <div>
         <top></top>
         <div class="text-center">
-            <p class="qr">QR</p>
+            <p class="qr">
+              <img src="/images/frame.png" />
+            </p>
             <div class="divine"></div>
             <div class="slider-wrapper">
               <b-carousel
@@ -89,7 +91,7 @@
 
   .qr {
     height: rem(80px);
-    margin:rem(180px) 0 rem(43px);
+    margin:rem(56px) 0 rem(230px);
   }
 
   .title {
