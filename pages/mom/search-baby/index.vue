@@ -58,7 +58,7 @@
             return {
                 linkedComplete:false,
                 form: {
-                    nickName:'test',
+                    nickName:'',
                 },
                 searchFailed:false,
                 searchBaby:null,
@@ -147,6 +147,7 @@
 
   img {
     width:100%;
+    height:100%;
   }
 }
 

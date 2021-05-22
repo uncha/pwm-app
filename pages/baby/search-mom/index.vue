@@ -152,6 +152,7 @@ import LinkedMom from '@/components/baby/linked-mom'
           else this.render = true
 
           this.mom = await this.loadMom()
+          console.log('THIS.MOM', this.mom)
           this.$store.commit('Baby/setMom', this.mom)
 
           if(this.linkedStay.length > 0) {

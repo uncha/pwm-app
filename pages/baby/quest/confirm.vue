@@ -72,6 +72,7 @@ import Top from '@/components/baby/top'
       return {
         questGroup:[],
         quest:[],
+        intervalId:'',
       }
     },
     computed: {
@@ -91,6 +92,10 @@ import Top from '@/components/baby/top'
     },
     mounted () {
       this.init()
+
+      this.intervalId = setInterval(()=>{
+        this.init()
+      }, 1000 * 30)
     },
     methods: {
       async init () {
@@ -127,6 +132,11 @@ import Top from '@/components/baby/top'
           this.$router.push({path:'/baby/quest/complete'})
         })
       },
+    },
+    destroyed () {
+      if(this.intervalId) {
+        window.clearInterval(this.intervalId)
+      }
     },
   }
 </script>

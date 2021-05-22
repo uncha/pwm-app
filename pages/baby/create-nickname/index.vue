@@ -7,7 +7,6 @@
                     <div class="profile-image-wrapper">
                         <p class="upload-image">
                             <template v-if="uploadImage">
-                                v1
                                 <img :src="profileImageURL" />
                             </template>
                         </p>
@@ -195,6 +194,7 @@
 
                 img {
                     width:100%;
+                    height:100%;
                 }
             }
 

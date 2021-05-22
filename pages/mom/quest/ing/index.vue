@@ -32,6 +32,7 @@
           <div class="divine"></div>
 
           <div class="quest-list">
+            {{this.successCount}}{{this.questList.length - 1}}{{this.selectGroup.success_count}}
             <p>퀘스트 달성현황</p>
             <ul class="list">
               <li @click="questConfirm(item.id, item)" v-for="item in executionList">
@@ -286,7 +287,7 @@
             },
             completeCheck () {
               this.$nextTick(()=>{
-                if(this.successCount == this.questList.length - 1 || this.successCount == this.selectGroup.success_count) {
+                if(this.successCount == this.questList.length || this.successCount == this.selectGroup.success_count) {
                   console.log('complete')
 
                   this.$refs['modal-quest-complete'].show()
@@ -305,7 +306,9 @@
             },
         },
         destroyed () {
-          this.clearInterval(this.intervalId)
+          if(this.intervalId) {
+            window.clearInterval(this.intervalId)
+          }
         },
     }
 </script>

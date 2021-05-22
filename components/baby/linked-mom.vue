@@ -12,10 +12,10 @@
           >
               <img :src="getProfileImageURL(link.profile_image)" class="face" />
               <template v-if="link.status == 0">
-                {{link.baby_nick_names}} 연결중...
+                {{link.mom_nick_name}} 연결중...
               </template>
               <template v-else>
-                {{link.baby_nick_names}}
+                {{link.mom_nick_name}}
               </template>
           </b-button>
       </div>
