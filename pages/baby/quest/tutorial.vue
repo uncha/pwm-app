@@ -33,7 +33,7 @@
           퀘스트에<br />
           도전해 볼래?
         </div>
-        <a href="#" class="btn-create-quest active" @click.prevent="$router.push({path:'/baby/quest/confirm'})">
+        <a href="#" class="btn-create-quest active" @click.prevent="onChallenge()">
           <div class="gradient-circle">
             <span class="create-text">
               도전하기<br />
@@ -105,7 +105,13 @@ import Top from '@/components/baby/top'
             resolve(res.data[0])
           })
         })
-      }
+      },
+      onChallenge () {
+        this.$axios.post(`/api/ChallengeQuest/${this.questGroup.id}`).then(res=>{
+          console.log('RES', res)
+          this.$router.push({path:'/baby/quest/confirm'})
+        })
+      },
     }
   }
 </script>

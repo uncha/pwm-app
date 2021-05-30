@@ -51,6 +51,10 @@
         this.questGroup = await this.loadQuestGroup()
 
         this.$store.commit('Baby/setLinked', this.linked)
+
+        if(this.questGroup[0].execution_state == 1) {
+          this.$router.push({path:'/baby/quest/confirm'});
+        }
       },
       loadData () {
         return new Promise(resolve=>{
