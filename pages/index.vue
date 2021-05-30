@@ -25,6 +25,7 @@ export default {
       NaverLogin,
       AppleLogin,
     },
+    mounted () {},
 }
 </script>
 

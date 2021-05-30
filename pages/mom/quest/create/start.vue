@@ -1,33 +1,34 @@
 <template>
   <div>
     <side-bar :links="links"></side-bar>
-    <p class="title text-center">
-        퀘스트를<br />
-        만들어보세요.
-    </p>
-
-    <linked-babies :links="links" @selectLink="onSelectLink">
-    </linked-babies>
-
-    <template v-if="!selectLink || selectLink.status == 0">
-
-      <a href="#" class="btn-create-quest">
-        <span class="create-text">
-          퀘스트<br />
-          만들기<br />
-          <b-icon class="ing-icon" icon="chevron-right" font-scale="1"></b-icon>
-        </span>
-      </a>
-      <p class="ing text-center">
-        <img src="/images/group_22.png" />
-        <b-icon class="ing-icon" icon="three-dots" animation="cylon" font-scale="2.4"></b-icon>
+    <template v-if="isIng===false">
+      <p class="title text-center">
+          퀘스트를<br />
+          만들어보세요.
       </p>
-    </template>
-    <template v-else>
-      <p class="ing text-center active">
-        <img src="/images/illust.png" />
-      </p>
-      <template v-if="isIng===false">
+
+      <linked-babies :links="links" @selectLink="onSelectLink">
+      </linked-babies>
+
+      <template v-if="!selectLink || selectLink.status == 0">
+
+        <a href="#" class="btn-create-quest">
+          <span class="create-text">
+            퀘스트<br />
+            만들기<br />
+            <b-icon class="ing-icon" icon="chevron-right" font-scale="1"></b-icon>
+          </span>
+        </a>
+        <p class="ing text-center">
+          <img src="/images/group_22.png" />
+          <b-icon class="ing-icon" icon="three-dots" animation="cylon" font-scale="2.4"></b-icon>
+        </p>
+      </template>
+      <template v-else>
+        <p class="ing text-center active">
+          <img src="/images/illust.png" />
+        </p>
+
         <a href="#" class="btn-create-quest active" @click.prevent="$router.push({path:'/mom/quest/create/select-quest'})">
           <div class="gradient-circle">
             <span class="create-text">
@@ -38,17 +39,12 @@
           </div>
         </a>
       </template>
-      <template v-else>
-        <a href="#" class="btn-create-quest active" @click.prevent="goConfirm">
-          <div class="gradient-circle">
-            <span class="create-text">
-              퀘스트<br />
-              확인하기<br />
-              <b-icon class="ing-icon" icon="chevron-right" font-scale="1"></b-icon>
-            </span>
-          </div>
-        </a>
-      </template>
+    </template>
+    <template v-else>
+      <linked-babies :links="links" @selectLink="onSelectLink">
+      </linked-babies>
+      
+      <quest-status></quest-status>
     </template>
   </div>
 </template>
@@ -57,12 +53,14 @@
     import LoginCheck from '@/mixins/loginCheck.js'
     import LinkedBabies from '@/components/mom/quest/linked-babies'
     import SideBar from '@/components/mom/side-bar'
+    import QuestStatus from '@/components/mom/quest/quest-status'
 
     export default {
       mixins:[LoginCheck],
       components: {
           'linked-babies': LinkedBabies,
           'side-bar': SideBar,
+          'quest-status': QuestStatus,
       },
       data () {
         return {
@@ -124,7 +122,6 @@
       },
     }
 </script>
-
 
 <style lang="scss" scoped>
 @import "~@/assets/scss/common.scss";
