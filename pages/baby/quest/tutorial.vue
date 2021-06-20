@@ -117,7 +117,7 @@ import Top from '@/components/baby/top'
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/common.scss";
+ 
 
 .quest-start {
   padding:0 rem(20px);

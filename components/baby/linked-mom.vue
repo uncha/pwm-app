@@ -88,7 +88,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/scss/common.scss";
+   
 
   #linked {
       position: fixed;

@@ -314,7 +314,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/scss/common.scss";
+     
 
     .quest-wrapper {
       margin-top:rem(80px);

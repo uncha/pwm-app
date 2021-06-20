@@ -162,7 +162,7 @@
 </script>
 
 <style lang="scss">
-    @import "~@/assets/scss/common.scss";
+     
 
     #create-nickname {
         .profile-image-wrapper {
@@ -242,7 +242,7 @@
 </style>
 
 <style lang="scss" scoped>
-    @import "~@/assets/scss/common.scss";
+     
 
     .title {
         font-size: rem(24px);

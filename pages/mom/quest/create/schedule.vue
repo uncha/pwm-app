@@ -149,7 +149,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/scss/common.scss";
+     
 
     .title {
       font-size:rem(24px);

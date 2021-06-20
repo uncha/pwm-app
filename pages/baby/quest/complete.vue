@@ -55,7 +55,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/common.scss";
+ 
 
 .wrap {
   margin-top:rem(180px);

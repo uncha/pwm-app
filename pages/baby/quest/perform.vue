@@ -138,7 +138,7 @@
 </script>
 
 <style lang="scss">
-@import "~@/assets/scss/common.scss";
+ 
 
 #perform {
   .profile-image-wrapper {
@@ -195,7 +195,7 @@
 </style>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/common.scss";
+ 
 
 .upload-image-wrap {
   .upload-image {

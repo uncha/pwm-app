@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/common.scss";
+ 
 .complete-wrapper {
   margin-top:rem(80px);
 }

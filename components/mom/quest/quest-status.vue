@@ -1,8 +1,11 @@
 <template>
-    <div>
-        <div class="quest-wrapper">
-          <p>{{ingQuest[0] && ingQuest[0].title}}</p>
-          <!-- <b-row>
+  <div>
+    <div class="quest-wrapper">
+      <div class="current-quest">
+        <p>현재 수행중 퀘스트</p>
+        <p class="quest-name">{{ingQuest[0] && ingQuest[0].title}}</p>
+      </div>
+      <!-- <b-row>
             <b-col>
               <p class="tit">퀘스트 완료현황</p>
             </b-col>
@@ -30,454 +33,558 @@
             </ul>
           </div> -->
 
-          <div class="divine"></div>
-          <div class="quest-list">
-            {{this.successCount}}{{this.questList.length - 1}}{{this.selectGroup.success_count}}
-            <p>퀘스트 달성현황</p>
-            <ul class="list">
-              <li @click="questConfirm(item.id, item)" v-for="item in questList">
-                <b-row no-gutters>
-                    <b-col class="date" cols="2">
-                      <img class="ico" src="/images/quest-icon-on.png" v-if="item.success_state == 1" />
-                      <img class="ico" src="/images/quest-icon-off.png" v-else />
-                    </b-col>
-                    <b-col class="quest-title" :class="{'success':item.success_state==1, 'failed':item.success_state==2}" cols="7">{{item.title}}
-                    </b-col>
-                </b-row>
-              </li>
-            </ul>
-          </div>
-
-          <a class="tit" href="#" @click.prevent="goConfirm">
-
-            {{questList.length}}개 중 <br />
-            <span class="text-primary">{{successCount}}</span>개 달성완료!
-          </a>
-
+      <div class="divine"></div>
+      <div class="quest-list">
+        <!-- {{this.successCount}}{{this.questList.length - 1}}{{this.selectGroup.success_count}}
+        <p>퀘스트 달성현황</p> -->
+        <div
+          v-if="executionList.length == 0"
+          class="text-center"
+        >
+          <img src="/images/img-carrot.svg" />
+          <p class="first-message">
+            수아와 함께하는 첫 퀘스트가 진행중입니다.<br />
+            당근을 얻지 못해도 괜찮아요~<br />
+            함께하는 과정을 재미있게 즐겨 주세요!<br />
+            <br />
+            아이와 함께하는 퀘스트는 무제한이니까요
+          </p>
         </div>
+        <ul class="list">
+          <li
+            @click="questConfirm(item.id, item)"
+            v-for="item in executionList"
+          >
+            <b-row no-gutters>
+              <b-col
+                class="date"
+                cols="2"
+              >
+                <img
+                  class="ico"
+                  src="/images/ico-quest-success.svg"
+                  v-if="item.success_state == 1"
+                />
+                <img
+                  class="ico"
+                  src="/images/ico-quest-notyet.svg"
+                  v-else
+                />
+              </b-col>
+              <b-col
+                class="quest-title"
+                :class="{'success':item.success_state==1, 'failed':item.success_state==2}"
+                cols="7"
+              >{{item.title}}
+              </b-col>
+            </b-row>
+          </li>
+        </ul>
+      </div>
 
-        <b-modal ref="modal-quest-confirm" centered hide-header hide-footer>
-            <div class="text-center">
-              <p class="quest-title">"{{confirmQuest.title}}"</p>
-              <p class="question">퀘스트를 달성했나요?</p>
-            </div>
+      <div class="bottom-wrap text-center">
+        <a
+          class="quest-status"
+          href="#"
+          @click.prevent="goConfirm"
+        >
+          {{questList.length}}개 중 <span class="text-primary">{{successCount}}</span>개 달성완료!
+        </a>
+      </div>
 
-            <div>
-              <img class="confirm-data-image" :src="confirmDataImageURL" />
-            </div>
-
-            <div class="text-center">
-                <b-row>
-                  <b-col class="p-1">
-                    <b-button variant="light" @click="handleFailed()">실패
-                    </b-button>
-                  </b-col>
-                  <b-col class="p-1">
-                    <b-button variant="primary" @click="handleSuccess()">성공!
-                    </b-button>
-                  </b-col>
-                </b-row>
-            </div>
-        </b-modal>
-
-        <b-modal ref="modal-quest-complete" centered hide-header hide-footer>
-            <div class="text-center">
-              <p class="quest-title">"퀘스트를 완료하시겠습니까?"</p>
-            </div>
-
-            <div class="text-center m-3">
-                <b-row>
-                  <b-col class="p-1" cols="5">
-                    <b-button variant="light" @click="cancelComplete()">취소
-                    </b-button>
-                  </b-col>
-                  <b-col class="p-1" cols="7">
-                    <b-button variant="primary" @click="successComplete()">완료
-                    </b-button>
-                  </b-col>
-                </b-row>
-            </div>
-        </b-modal>
     </div>
+
+    <b-modal
+      ref="modal-quest-confirm"
+      centered
+      hide-header
+      hide-footer
+    >
+      <div class="text-center">
+        <p class="quest-title">"{{confirmQuest.title}}"</p>
+        <p class="question">퀘스트를 달성했나요?</p>
+      </div>
+
+      <div>
+        <img
+          class="confirm-data-image"
+          :src="confirmDataImageURL"
+        />
+      </div>
+
+      <div class="text-center">
+        <b-row>
+          <b-col class="p-1">
+            <b-button
+              variant="light"
+              @click="handleFailed()"
+            >실패
+            </b-button>
+          </b-col>
+          <b-col class="p-1">
+            <b-button
+              variant="primary"
+              @click="handleSuccess()"
+            >성공!
+            </b-button>
+          </b-col>
+        </b-row>
+      </div>
+    </b-modal>
+
+    <b-modal
+      ref="modal-quest-complete"
+      centered
+      hide-header
+      hide-footer
+    >
+      <div class="text-center">
+        <p class="quest-title">"퀘스트를 완료하시겠습니까?"</p>
+      </div>
+
+      <div class="text-center m-3">
+        <b-row>
+          <b-col
+            class="p-1"
+            cols="5"
+          >
+            <b-button
+              variant="light"
+              @click="cancelComplete()"
+            >취소
+            </b-button>
+          </b-col>
+          <b-col
+            class="p-1"
+            cols="7"
+          >
+            <b-button
+              variant="primary"
+              @click="successComplete()"
+            >완료
+            </b-button>
+          </b-col>
+        </b-row>
+      </div>
+    </b-modal>
+  </div>
 </template>
 
 <script type="text/javascript">
-    import LoginCheck from '@/mixins/loginCheck.js'
-    import Top from '@/components/top'
+import LoginCheck from "@/mixins/loginCheck.js";
+import Top from "@/components/top";
 
-    export default {
-        mixins:[LoginCheck],
-        components: {
-            'top': Top,
-        },
-        data () {
-            return {
-                questList:[],
-                selectGroup:'',
-                confirmQuest:'',
-                links:[],
-                confirmData:'',
-                intervalId:'',
-            }
-        },
-        computed: {
-          authUser () {
-            return this.$store.getters['authUser']
+export default {
+  mixins: [LoginCheck],
+  components: {
+    top: Top,
+  },
+  data() {
+    return {
+      questList: [],
+      selectGroup: "",
+      confirmQuest: "",
+      links: [],
+      confirmData: "",
+      intervalId: "",
+    };
+  },
+  computed: {
+    authUser() {
+      return this.$store.getters["authUser"];
+    },
+    selectLink() {
+      return this.$store.getters["selectLink"];
+    },
+    giftImageURL() {
+      if (window.location.host == "localhost:3000") {
+        return `http://localhost:9102${this.selectGroup.success_gift}`;
+      } else {
+        return this.selectGroup.success_gift;
+      }
+    },
+    confirmDataImageURL() {
+      if (window.location.host == "localhost:3000") {
+        return `http://localhost:9102${this.confirmData.execution_pic}`;
+      } else {
+        return this.confirmData.execution_pic;
+      }
+    },
+    successCount() {
+      let successQuest = _.filter(this.questList, (item) => {
+        return item.success_state == 1;
+      });
+      return successQuest.length;
+    },
+    currentQuest() {
+      let currentQuest = _.find(this.questList, (item) => {
+        return moment(item.start_date).valueOf() <= moment().valueOf();
+      });
+
+      return currentQuest;
+    },
+    nextQuest() {
+      let nextQuest = _.find(this.questList, (item) => {
+        return (
+          moment(item.start_date).valueOf() >
+          moment(this.currentQuest.start_date).valueOf()
+        );
+      });
+
+      return nextQuest;
+    },
+    executionList() {
+      return _.filter(this.questList, (item) => {
+        return item.complete_sate != 0;
+      });
+    },
+    successIndex() {
+      let id = 0;
+      let cnt = 0;
+
+      _.forEach(this.questList, (item, i) => {
+        if (item.success_state == 1 && cnt < this.selectGroup.success_count) {
+          cnt++;
+          id++;
+        }
+      });
+
+      return id == this.selectGroup.success_count ? id : -1;
+    },
+    ingQuest() {
+      return _.filter(this.questList, (item, i) => {
+        return item.success_state == 0;
+      });
+    },
+  },
+  mounted() {
+    this.init();
+
+    this.intervalId = setInterval(() => {
+      this.init();
+    }, 1000 * 30);
+  },
+  methods: {
+    async init() {
+      let selectGroup = await this.loadSelectGroup(this.selectLink);
+      this.selectGroup = selectGroup[0];
+      this.questList = await this.loadQuestList(this.selectGroup);
+
+      await this.$axios
+        .get(`/api/linked/mom`, {
+          params: {
+            mom_nick_name: this.authUser,
           },
-          selectLink () {
-            return this.$store.getters['selectLink']
-          },
-          giftImageURL () {
-              if(window.location.host == 'localhost:3000') {
-                return `http://localhost:9102${this.selectGroup.success_gift}`
-              } else {
-                return this.selectGroup.success_gift
-              }
-          },
-          confirmDataImageURL () {
-              if(window.location.host == 'localhost:3000') {
-                return `http://localhost:9102${this.confirmData.execution_pic}`
-              } else {
-                return this.confirmData.execution_pic
-              }
-          },
-          successCount () {
-              let successQuest = _.filter(this.questList, item=>{
-                return item.success_state == 1
-              })
-              return successQuest.length
-          },
-          currentQuest () {
-              let currentQuest = _.find(this.questList, item=>{
-                return moment(item.start_date).valueOf() <= moment().valueOf()
-              })
+        })
+        .then((res) => {
+          this.links = res.data;
+          console.log("RES.DATA4444", res);
 
-              return currentQuest
-          },
-          nextQuest() {
-            let nextQuest = _.find(this.questList, item=>{
-              return moment(item.start_date).valueOf() > moment(this.currentQuest.start_date).valueOf()
-            })
+          this.completeCheck();
+        });
+    },
+    questConfirm(questId, confirmData) {
+      this.confirmQuest = _.find(this.questList, (item) => {
+        return item.id == questId;
+      });
 
-            return nextQuest
-          },
-          executionList () {
-            return _.filter(this.questList, item=>{
-              return item.complete_sate != 0
-            })
-          },
-          successIndex () {
-            let id = 0
-            let cnt = 0
+      this.confirmData = confirmData;
 
-            _.forEach(this.questList, (item, i) => {
-              if(item.success_state == 1 && cnt < this.selectGroup.success_count) {
-                cnt++
-                id++
-              }
-            });
+      // if(moment(this.confirmQuest.start_date).valueOf() <= moment().valueOf()) {
+      //   this.$refs['modal-quest-confirm'].show()
+      // }
+      this.$refs["modal-quest-confirm"].show();
+    },
+    loadSelectGroup(link) {
+      return new Promise((resolve) => {
+        this.$axios.get(`/api/selectQuestGroup/${link.id}`).then((res) => {
+          resolve(res.data);
+        });
+      });
+    },
+    loadQuestList(group) {
+      return new Promise((resolve) => {
+        this.$axios.get(`/api/selectQuest/${group.id}`).then((res) => {
+          let list = _.sortBy(res.data, (item) => {
+            return item.start_date;
+          });
 
-            return id == this.selectGroup.success_count ? id : -1
-          },
-          ingQuest () {
-            return _.filter(this.questList, (item, i) => {
-              return item.success_state == 0
-            })
-          },
-        },
-        mounted () {
-          this.init()
+          resolve(list);
+        });
+      });
+    },
+    getFormatDate(date) {
+      return `${moment(date).month() + 1}월${moment(
+        date
+      ).date()}일(${this.getWeekName(moment(date).day())})`;
+    },
+    getFormatTime(date) {
+      let hour = moment(date).hour();
 
-          this.intervalId = setInterval(()=>{
-            this.init()
-          }, 1000 * 30)
-        },
-        methods: {
-            async init () {
-              let selectGroup = await this.loadSelectGroup(this.selectLink)
-              this.selectGroup = selectGroup[0]
-              this.questList = await this.loadQuestList(this.selectGroup)
+      if (hour > 12) {
+        return `오후 ${hour - 12}`;
+      } else {
+        return `오전 ${hour}`;
+      }
+    },
+    questStatus() {
+      let message = "";
+      if (this.questList.length == 0) return "";
 
-              await this.$axios.get(`/api/linked/mom`, {
-                params:{
-                  mom_nick_name:this.authUser
-                }
-              }).then(res=>{
-                this.links = res.data
-                console.log('RES.DATA4444', res)
+      let diff = moment(this.questList[0].start_date).diff(moment(), "day");
+      message = `${diff + 1}일째 진행중`;
 
-                this.completeCheck()
-              })
-            },
-            questConfirm (questId, confirmData) {
-                this.confirmQuest = _.find(this.questList, item=>{
-                  return item.id == questId
-                })
+      return message;
+    },
+    async handleSuccess() {
+      console.log(this.confirmQuest);
+      this.$axios
+        .post(`/api/selectQuest/${this.confirmQuest.id}`, {
+          success_state: 1,
+        })
+        .then((res) => {
+          this.resetQuestList();
+          this.$refs["modal-quest-confirm"].hide();
+        });
+    },
+    async handleFailed() {
+      this.$axios
+        .post(`/api/selectQuest/${this.confirmQuest.id}`, {
+          success_state: 2,
+        })
+        .then((res) => {
+          this.resetQuestList();
+          this.$refs["modal-quest-confirm"].hide();
+        });
+    },
+    async resetQuestList() {
+      this.questList = await this.loadQuestList(this.selectGroup);
 
-                this.confirmData = confirmData
+      this.completeCheck();
+    },
+    executionPicURL(url) {
+      if (window.location.host == "localhost:3000") {
+        return `http://localhost:9102${url}`;
+      } else {
+        return url;
+      }
+    },
+    completeCheck() {
+      this.$nextTick(() => {
+        if (
+          this.successCount == this.questList.length ||
+          this.successCount == this.selectGroup.success_count
+        ) {
+          console.log("complete");
 
-                // if(moment(this.confirmQuest.start_date).valueOf() <= moment().valueOf()) {
-                //   this.$refs['modal-quest-confirm'].show()
-                // }
-                this.$refs['modal-quest-confirm'].show()
-            },
-            loadSelectGroup (link) {
-               return new Promise(resolve=>{
-                  this.$axios.get(`/api/selectQuestGroup/${link.id}`).then(res=>{
-                      resolve(res.data)
-                  })
-               })
-            },
-            loadQuestList(group) {
-               return new Promise(resolve=>{
-                 this.$axios.get(`/api/selectQuest/${group.id}`).then(res=>{
-                      let list = _.sortBy(res.data, item=>{
-                        return item.start_date
-                      })
-
-                      resolve(list)
-                 })
-               })
-            },
-            getFormatDate (date) {
-              return `${moment(date).month()+1}월${moment(date).date()}일(${this.getWeekName(moment(date).day())})`
-            },
-            getFormatTime(date) {
-              let hour = moment(date).hour()
-
-              if(hour > 12) {
-                return `오후 ${hour - 12}`
-              } else {
-                return `오전 ${hour}`
-              }
-            },
-            questStatus () {
-              let message = ''
-              if(this.questList.length == 0) return ''
-
-              let diff = moment(this.questList[0].start_date).diff(moment(), 'day')
-              message = `${diff + 1}일째 진행중`
-
-              return message
-            },
-            async handleSuccess () {
-              console.log(this.confirmQuest)
-              this.$axios.post(`/api/selectQuest/${this.confirmQuest.id}`, {
-                success_state:1
-              }).then(res=>{
-                this.resetQuestList()
-                this.$refs['modal-quest-confirm'].hide()
-              })
-            },
-            async handleFailed () {
-              this.$axios.post(`/api/selectQuest/${this.confirmQuest.id}`, {
-                success_state:2
-              }).then(res=>{
-                this.resetQuestList()
-                this.$refs['modal-quest-confirm'].hide()
-              })
-            },
-            async resetQuestList () {
-              this.questList = await this.loadQuestList(this.selectGroup)
-
-              this.completeCheck()
-            },
-            executionPicURL (url) {
-              if(window.location.host == 'localhost:3000') {
-                return `http://localhost:9102${url}`
-              } else {
-                return url
-              }
-            },
-            completeCheck () {
-              this.$nextTick(()=>{
-                if(this.successCount == this.questList.length || this.successCount == this.selectGroup.success_count) {
-                  console.log('complete')
-
-                  this.$refs['modal-quest-complete'].show()
-                }
-              })
-            },
-            cancelComplete () {
-              this.$refs['modal-quest-complete'].hide()
-            },
-            successComplete () {
-              this.$axios.post(`/api/completeQuestGroup/${this.selectGroup.id}`, {
-                state:'1'
-              }).then(res=>{
-                this.$router.push({path:'/mom/quest/ing/complete'})
-              })
-            },
-            goConfirm () {
-              if(this.selectGroup.complete_state == '1') {
-                this.$router.push({path:'/mom/quest/ing/complete'})
-              } else {
-                this.$router.push({path:'/mom/quest/ing'})
-              }
-            },
-        },
-        destroyed () {
-          if(this.intervalId) {
-            window.clearInterval(this.intervalId)
-          }
-        },
+          this.$refs["modal-quest-complete"].show();
+        }
+      });
+    },
+    cancelComplete() {
+      this.$refs["modal-quest-complete"].hide();
+    },
+    successComplete() {
+      this.$axios
+        .post(`/api/completeQuestGroup/${this.selectGroup.id}`, {
+          state: "1",
+        })
+        .then((res) => {
+          this.$router.push({ path: "/mom/quest/ing/complete" });
+        });
+    },
+    goConfirm() {
+      if (this.selectGroup.complete_state == "1") {
+        this.$router.push({ path: "/mom/quest/ing/complete" });
+      } else {
+        this.$router.push({ path: "/mom/quest/ing" });
+      }
+    },
+  },
+  destroyed() {
+    if (this.intervalId) {
+      window.clearInterval(this.intervalId);
     }
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/scss/common.scss";
+.today-quest {
+  background: #497ff5;
+  color: #fff;
+  box-shadow: 0 5px 10px #ccc;
+  margin-bottom: rem(30px);
+  padding: rem(30px) 0;
 
-    .quest-wrapper {
-      margin-top:rem(80px);
+  .date {
+    font-size: rem(16px);
+    margin-bottom: rem(10px);
+  }
+
+  .title {
+    font-weight: 600;
+    font-size: rem(20px);
+    margin-bottom: rem(30px);
+  }
+
+  .description {
+    font-size: rem(14px);
+    color: #497ff5;
+    background: #fff;
+    border-radius: rem(40px);
+    width: rem(200px);
+    line-height: rem(40px);
+    text-align: center;
+    margin: 0 auto;
+  }
+}
+
+.div {
+  background: #f5f5f5;
+  height: rem(18px);
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
+
+.quest-list {
+  margin-top: rem(25px);
+
+  .t1 {
+    font-size: rem(16px);
+    line-height: rem(30px);
+  }
+
+  .quest-status {
+    font-size: rem(14px);
+    line-height: rem(30px);
+    color: #497ff5;
+    text-align: right;
+  }
+}
+
+.total-success {
+  font-size: rem(18px);
+  line-height: rem(30px);
+  color: #000;
+  margin-top: rem(10px);
+
+  .count {
+    color: #497ff5;
+  }
+}
+
+.quest-list {
+  .date {
+    font-size: rem(13px);
+    line-height: rem(48px);
+    color: #000;
+    font-family: NotoSansCJKkr-Regular;
+  }
+
+  .quest-title {
+    font-size: rem(14px);
+    line-height: rem(48px);
+
+    &.success {
+      color: #497ff5;
+      text-decoration: line-through;
     }
 
-    .today-quest {
-      background: #497ff5;
-      color:#FFF;
-      box-shadow: 0 5px 10px #CCC;
-      margin-bottom: rem(30px);
-      padding:rem(30px) 0;
+    &.failed {
+      color: #aaa;
+      text-decoration: line-through;
+    }
+  }
+}
 
-      .date {
-        font-size: rem(16px);
-        margin-bottom: rem(10px);
-      }
+.gift {
+  margin-top: rem(25px);
+  margin-bottom: rem(33px);
 
-      .title {
-        font-weight: 600;
-        font-size: rem(20px);
-        margin-bottom: rem(30px);
-      }
+  img {
+    max-width: 100%;
+    border-radius: rem(5px);
+  }
+}
+.modal-body {
+  .quest-title {
+    font-size: rem(24px);
+    margin-bottom: 0;
+    margin-top: rem(30px);
+  }
 
-      .description {
-        font-size: rem(14px);
-        color:#497ff5;
-        background: #FFF;
-        border-radius: rem(40px);
-        width: rem(200px);
-        line-height: rem(40px);
-        text-align: center;
-        margin:0 auto;
-      }
+  .question {
+    font-size: rem(18px);
+    margin-bottom: rem(60px);
+  }
+}
+
+.quest-list-total {
+  > ul {
+    &:after {
+      clear: both;
+      content: "";
+      display: block;
     }
 
-    .div{
-      background: #f5f5f5;
-      height: rem(18px);
-      position: absolute;
-      width: 100%;
-      left:0;
-    }
+    > li {
+      width: 20%;
+      float: left;
+      margin-bottom: rem(18px);
 
-    .quest-list {
-      margin-top:rem(25px);
-
-      .t1 {
-        font-size: rem(16px);
-        line-height: rem(30px);
-      }
-
-      .quest-status {
-        font-size: rem(14px);
-        line-height: rem(30px);
-        color:#497ff5;
-        text-align: right;
+      .ico {
+        width: rem(48px);
+        height: rem(48px);
       }
     }
+  }
+}
 
-    .total-success {
-      font-size: rem(18px);
-      line-height: rem(30px);
-      color:#000;
-      margin-top:rem(10px);
+.date {
+  font-size: rem(14px);
+}
 
-      .count{
-        color:#497ff5;
-      }
-    }
+.execution-image {
+  width: rem(44px);
+  height: rem(44px);
+  border-radius: 4px;
+}
 
-    .quest-list {
-      .date {
-        font-size: rem(13px);
-        line-height: rem(48px);
-        color:#000;
-        font-family: NotoSansCJKkr-Regular;
-      }
+.confirm-data-image {
+  width: 100%;
+  box-shadow: 2px 2px 10px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  margin-bottom: rem(40px);
+}
 
-      .quest-title {
-        font-size: rem(14px);
-        line-height: rem(48px);
-        text-align: right;
+.current-quest {
+  background: #1ec89b;
+  border-radius: rem(16px);
+  padding: rem(14px) rem(14px) rem(36px) rem(14px);
+  color: #fff;
+  margin-bottom: rem(30px);
 
-        &.success {
-          color:#497ff5;
-          text-decoration: line-through;
-        }
+  p {
+    margin-bottom: 0;
+    font-weight: 400;
+  }
 
-        &.failed {
-          color:#aaa;
-          text-decoration: line-through;
-        }
-      }
-    }
+  .quest-name {
+    font-weight: 500;
+    margin-top: rem(20px);
+    font-size: rem(20px);
+  }
+}
 
-    .gift {
-      margin-top:rem(25px);
-      margin-bottom: rem(33px);
+.quest-status {
+  color: #000;
+}
 
-      img {
-        max-width: 100%;
-        border-radius: rem(5px);
-      }
-    }
-    .modal-body {
-      .quest-title {
-        font-size: rem(24px);
-        margin-bottom: 0;
-        margin-top:rem(30px);
-      }
-
-      .question {
-        font-size: rem(18px);
-        margin-bottom: rem(60px);
-      }
-    }
-
-    .quest-list-total {
-      > ul {
-        &:after {
-          clear:both;
-          content:'';
-          display: block;
-        }
-
-        > li {
-          width:20%;
-          float:left;
-          margin-bottom: rem(18px);
-
-          .ico {
-            width:rem(48px);
-            height:rem(48px);
-          }
-        }
-      }
-    }
-
-    .date {
-      font-size:rem(14px);
-    }
-
-    .execution-image {
-      width: rem(44px);
-      height: rem(44px);
-      border-radius: 4px;
-    }
-
-    .confirm-data-image {
-      width: 100%;
-      box-shadow: 2px 2px 10px 5px rgba(0, 0, 0, 0.2);
-      border-radius: 5px;
-      margin-bottom: rem(40px)
-    }
+.first-message {
+  color: #aaa;
+  font-size: rem(14px);
+  margin-top: rem(16px);
+}
 </style>

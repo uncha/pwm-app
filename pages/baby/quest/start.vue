@@ -93,7 +93,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/common.scss";
+ 
 
 .quest-start-wrapper {
   margin-top: rem(168px);

@@ -36,7 +36,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/scss/common.scss";
+   
 
   .top-area {
     position: fixed;

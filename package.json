@@ -8,11 +8,14 @@
     "start": "nuxt start",
     "generate": "nuxt generate"
   },
+  "lint": "eslint --ext .js,.vue src",
   "dependencies": {
     "@nuxtjs/axios": "^5.13.0",
+    "@nuxtjs/style-resources": "^1.1.0",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.8.3",
+    "eslint": "^7.28.0",
     "jQuery": "^1.7.4",
     "jsdom": "^16.4.0",
     "location": "^0.0.1",
@@ -20,6 +23,7 @@
     "moment": "^2.29.1",
     "navigator": "^1.0.1",
     "nuxt": "^2.14.12",
+    "prettier": "^2.3.1",
     "swiper": "^6.4.11",
     "vue-loader": "^15.9.6",
     "vue-style-loader": "^4.1.2",

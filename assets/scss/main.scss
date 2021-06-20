@@ -1,0 +1,143 @@
+@charset "UTF-8";
+
+// Bootstrap and BootstrapVue SCSS files
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~bootstrap-vue/src/index.scss";
+
+// .contents {
+//   margin-top: rem(110px);
+// }
+
+.btn-icon {
+  padding-top: rem(15px);
+  padding-bottom: rem(15px);
+  box-shadow: 1px 2px 7px rgba(0,0,0,0.25);
+
+  span {
+    font-size: rem(16px);
+    line-height: rem(52px);
+  }
+}
+
+.profile-image-wrapper {
+  position: relative;
+  height: rem(72px);
+  width: rem(72px);
+
+  &:after {
+      content:'';
+      display: block;
+      width: rem(91px);
+      height: rem(91px);
+      border-radius: 100%;
+      position: absolute;
+      left:rem(5px);
+      top:rem(5px);
+  }
+
+  .upload-image {
+      position: absolute;
+      width: rem(72px);
+      height: rem(72px);
+      background: #CCC;
+      border-radius: 100%;
+      overflow: hidden;
+      z-index:5;
+
+      img {
+          width:100%;
+          height:100%;
+      }
+  }
+
+  .box-file-input {
+      position: absolute;
+      z-index: 6;
+      top:rem(41px);
+      left:rem(50px);
+  }
+
+  .box-file-input .form-group {
+      margin-bottom: 0;
+  }
+
+  .box-file-input label{
+    display:inline-block;
+    background: #17265D;
+    color:#fff;
+    cursor:pointer;
+    border-radius: 100%;
+  }
+
+  .box-file-input label:after{
+      background-size: rem(30px) rem(30px);
+      display: inline-block;
+      background-position: 0 0;
+      background-repeat: no-repeat;
+      width: rem(30px);
+      height: rem(25px);
+      content: "";
+      background-image: url(/images/icon-camera.svg);
+      background-size: 55%;
+      background-position: rem(7px) rem(7px);
+  }
+
+  .box-file-input input[type="file"]{
+    display:none;
+  }
+
+  .box-file-input .filename{
+    display:inline-block;
+    padding-left:10px;
+  }
+}
+
+.bottom-wrap {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  left:0;
+  padding: 0 rem(24px);
+  padding-bottom: rem(40px);
+
+  &.full {
+    padding:0;
+    padding-bottom: 0;
+    
+    button {
+      border-radius: 0 !important;
+      padding-top: rem(6px);
+      padding-bottom: rem(6px);
+    }
+  }
+}
+
+.profile-circle {
+  width: rem(80px);
+  height: rem(80px);
+  margin:0 auto;
+  border-radius: 100%;
+}
+
+.modal {
+  position: fixed;
+  bottom:0;
+  top: auto;
+  height: auto;
+}
+
+.modal-content {
+  border-radius: rem(40px);
+}
+
+.modal.fade .modal-dialog {
+  transform:translate(0, 200px) !important;
+
+  .btn {
+    font-size: rem(16px);
+  }
+}
+
+.modal.show .modal-dialog {
+  transform:translate(0, 0) !important;
+}

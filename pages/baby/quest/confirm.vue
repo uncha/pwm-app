@@ -142,7 +142,7 @@ import Top from '@/components/baby/top'
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/common.scss";
+ 
 
 .quest-box {
   text-align: center;

@@ -5,38 +5,45 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import _ from 'lodash'
-import moment from 'moment';
-import BaseMixin from '@/mixins/base.js';
+import Vue from "vue";
+import _ from "lodash";
+import moment from "moment";
+import BaseMixin from "@/mixins/base.js";
 
 if (!Vue.__my_mixin__) {
-	Vue.__my__mixin__ = true;
-	Vue.mixin({
-		mixins: [BaseMixin],
-	});
+  Vue.__my__mixin__ = true;
+  Vue.mixin({
+    mixins: [BaseMixin],
+  });
 }
 
 export default {
-    created () {
-        window._ = _
-        window.moment = moment
+  created() {
+    window._ = _;
+    window.moment = moment;
+  },
+  watch: {
+    "$route.path"() {
+      if (
+        this.$route.path == "/baby/quest/complete" ||
+        this.$route.path == "/mom/quest/ing/complete"
+      ) {
+        $("html").addClass("pollen");
+      } else {
+        $("html").removeClass("pollen");
+      }
+
+      if (this.$route.path == "/mom/qr-link") {
+        $(".contents").addClass("qr");
+      } else {
+        $(".contents").removeClass("qr");
+      }
     },
-    watch: {
-      '$route.path' () {
-        if(this.$route.path == '/baby/quest/complete' || this.$route.path == '/mom/quest/ing/complete') {
-          $('html').addClass('pollen')
-        } else {
-          $('html').removeClass('pollen')
-        }
-      },
-    },
-}
+  },
+};
 </script>
 
 <style lang="scss">
-@import "~@/assets/scss/common.scss";
-
 @font-face {
   font-family: "NotoSansCJKkr-Medium";
   font-style: normal;
@@ -64,8 +71,15 @@ export default {
     url(/fonts/NotoSansCJKkr/NotoSansMonoCJKkr-Regular.otf) format("opentype");
 }
 
+@font-face {
+  font-family: "Rubik-Light";
+  font-style: normal;
+  font-weight: normal;
+  src: url("/fonts/Rubik/Rubik-Light.ttf") format("truetype");
+}
+
 html {
-  font-family:'NotoSansCJKkr-Medium';
+  font-family: "NotoSansCJKkr-Medium";
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -75,14 +89,14 @@ html {
   box-sizing: border-box;
 
   &.pollen {
-    background: url('/images/img_pollen.png');
+    background: url("/images/img_pollen.png");
     background-size: contain;
   }
 }
 
 body {
-    font-family:'NotoSansCJKkr-Medium';
-    background: transparent;
+  font-family: "NotoSansCJKkr-Medium";
+  background: transparent;
 }
 
 *,
@@ -90,69 +104,97 @@ body {
 *::after {
   box-sizing: border-box;
   margin: 0;
+  line-height: 150%;
 }
 
 .contents {
-    padding: 0 rem(24px);
+  padding: 0 rem(24px);
+  padding-top: rem(110px);
+  //background: red;
+
+  &.qr {
+    background: #f9f9f9;
+  }
 }
 
 header.header {
   position: fixed;
-  top:0;
-  padding-top:rem(26px);
+  top: 0;
+  padding-top: rem(26px);
+}
+
+%input {
+  border: 0;
+  border-bottom: 2px solid #000;
+  border-radius: 0;
+  font-size: rem(18px);
+  color: #000;
+  padding-left: 0;
 }
 
 input[type="text"] {
-    border:0;
-    border-bottom: 2px solid #000;
-    border-radius: 0;
-    font-size: rem(18px);
-    color:#000;
+  @extend %input;
 }
 
 input[type="password"] {
-    border:0;
-    border-bottom: 2px solid #000;
-    border-radius: 0;
-    font-size: rem(18px);
-    color:#000;
+  @extend %input;
 }
 
 %button {
-    width:100%;
-    height: rem(56px);
-    border-radius: rem(28px) !important;
-    font-size: rem(18px);
+  width: 100%;
+  border-radius: rem(16px) !important;
+  font-size: rem(18px);
+  padding-top: rem(6px);
+  padding-bottom: rem(6px);
+  font-weight: 400;
 }
 
 .btn-primary {
   @extend %button;
 
-  background:linear-gradient(180deg, #29c3dc, #17addf);
-  border:0;
+  border: 0;
+}
+
+.btn-white {
+  @extend %button;
+
+  border: 0;
 }
 
 .btn-light {
   @extend %button;
 
-  background: #eee;
-  color:#aaa;
+  background: #dddddd;
+  color: #aaa;
+}
+
+.btn-mute {
+  @extend %button;
+
+  color: #1d7ff1;
 }
 
 ul {
-  padding-left:0;
+  padding-left: 0;
 }
 
 li {
   list-style: none;
 }
 
+h1 {
+  font-weight: 700;
+  font-size: rem(26px);
+  line-height: 150%;
+  margin-bottom: rem(48px);
+}
+
 %box {
   padding: rem(60px) 0 rem(26px);
   text-align: center;
   border-radius: rem(8px);
-  color:#FFF;
-  box-shadow: 0 5px 10px #CCC;
+  color: #fff;
+  box-shadow: 0 5px 10px #ccc;
 
   .description {
     font-size: rem(14px);
@@ -160,7 +202,7 @@ li {
   .title {
     font-size: rem(24px);
     line-height: rem(34px);
-    margin:0;
+    margin: 0;
     margin-bottom: rem(166px);
   }
 }
@@ -172,7 +214,7 @@ li {
 
 .white-box {
   @extend %box;
-  background: #FFF;
+  background: #fff;
 }
 
 .divine {

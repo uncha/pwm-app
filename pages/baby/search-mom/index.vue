@@ -220,7 +220,7 @@ import LinkedMom from '@/components/baby/linked-mom'
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/common.scss";
+ 
 
 #search-mom {
   margin-top:rem(168px);
@@ -339,7 +339,7 @@ import LinkedMom from '@/components/baby/linked-mom'
 </style>
 
 <style lang="scss">
-@import "~@/assets/scss/common.scss";
+ 
 #linked-mom-modal{
   .upload-image {
       width: rem(100px);
