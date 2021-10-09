@@ -37,5 +37,12 @@ export default {
       goBack() {
         this.$router.go(-1);
       },
+      getProfileImageURL(url) {
+        if (window.location.host == "localhost:3000") {
+          return `http://localhost:9102${url}`;
+        } else {
+          return url;
+        }
+      },
     }
 }

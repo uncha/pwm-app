@@ -4,6 +4,7 @@
     :class="{'bg-white':whiteBg == true}"
   >
     <b-button
+      v-if="hideBack!=true"
       class="btn-back"
       @click.prevent="back"
       variant="mute"
@@ -51,6 +52,11 @@ export default {
       type: String,
       required: false,
       default: null,
+    },
+    hideBack: {
+      type: Boolean,
+      require: false,
+      default: false,
     },
   },
   computed: {
@@ -100,7 +106,7 @@ export default {
   z-index: 999;
   width: 100%;
   left: 0;
-  padding: rem(46px) rem(10px) 0;
+  padding: rem(38px) rem(10px) 0;
   margin-bottom: rem(30px);
 }
 

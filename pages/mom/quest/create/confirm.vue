@@ -11,7 +11,7 @@
         다음 퀘스트가 랜덤으로 <br />
         발송되며 진행됩니다.
       </div>
-      <div class="text-center">
+      <div class="text-center mt-5 pt-4">
         <img src="/images/mission-desc.svg" />
       </div>
       <div class="bottom-wrap">
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   data() {
     return {};
@@ -84,7 +85,19 @@ export default {
         });
 
         Promise.all(promises).then((resAll) => {
-          this.$router.push({ path: "/mom/quest/ing" });
+          this.$axios
+            .post("/api/executionQuest", {
+              title: this.questList[0],
+              group_id: res.data.insertId,
+              execution_date: moment()
+                .hour(0)
+                .minutes(0)
+                .seconds(0)
+                .format("YYYY-MM-DD HH:mm:ss"),
+            })
+            .then((res) => {
+              this.$router.push({ path: "/mom/quest/create/start" });
+            });
         });
       });
     },

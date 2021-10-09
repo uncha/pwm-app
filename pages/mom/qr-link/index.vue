@@ -1,9 +1,9 @@
   <template>
-  <div>
+  <div id="qr-link">
     <top></top>
     <div class="text-center">
 
-      <b-carousel
+      <!-- <b-carousel
         id="carousel-2"
         style="text-shadow: 0px 0px 2px #000"
         indicators
@@ -21,7 +21,22 @@
             <p class="mt-1 text-left qr-type"><img src="/images/icon-ios.svg" /> ios</p>
           </div>
         </b-carousel-slide>
-      </b-carousel>
+      </b-carousel> -->
+
+      <b-tabs content-class="mt-3">
+        <b-tab
+          title="Android"
+          active
+        >
+          <p>
+            <img src="/images/and-qr.svg">
+          </p>
+        </b-tab>
+        <b-tab title="ios">
+          <img src="/images/ios-qr.svg">
+        </b-tab>
+      </b-tabs>
+
       <div class="bottom-wrap">
         <b-button
           variant="primary"
@@ -75,11 +90,47 @@ export default {
 </script>
 
 <style lang="scss">
+#qr-link {
+  .nav-tabs {
+    .nav-item {
+      width: 50%;
+
+      .nav-link {
+        border: 1px solid #1ec89b;
+        color: #1ec89b;
+        border-radius: 0;
+
+        &.active {
+          background: #1ec89b;
+          color: #fff;
+        }
+      }
+
+      &:first-child {
+        .nav-link {
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+        }
+      }
+
+      &:last-child {
+        .nav-link {
+          border-top-right-radius: 8px;
+          border-bottom-right-radius: 8px;
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    padding-top: rem(35px);
+  }
+}
+
 .carousel-indicators {
   margin-bottom: 2rem;
-  // left: auto;
-  // right: auto;
-  // margin-left: rem(24px);
+  right: auto;
+  margin-left: rem(30px);
 }
 
 .carousel-indicators li {

@@ -32,9 +32,9 @@
           </b-button>
         </template>
         <template v-else>
-          <p class="ing text-center active">
+          <!-- <p class="ing text-center active">
             <img src="/images/illust.png" />
-          </p>
+          </p> -->
 
           <b-button
             variant="primary"

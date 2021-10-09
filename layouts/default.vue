@@ -33,11 +33,29 @@ export default {
         $("html").removeClass("pollen");
       }
 
-      if (this.$route.path == "/mom/qr-link") {
-        $(".contents").addClass("qr");
+      if (this.$route.path == "/baby/quest/confirm") {
+        $("html").addClass("full-size");
       } else {
-        $(".contents").removeClass("qr");
+        $("html").removeClass("full-size");
       }
+
+      if (this.$route.path == "/baby/quest/tutorial") {
+        $("html").addClass("full-size-white");
+      } else {
+        $("html").removeClass("full-size-white");
+      }
+
+      if (this.$route.path == "/baby/search-mom") {
+        $("html").addClass("full-size-search-mom");
+      } else {
+        $("html").removeClass("full-size-search-mom");
+      }
+
+      // if (this.$route.path == "/mom/qr-link") {
+      //   $(".contents").addClass("qr");
+      // } else {
+      //   $(".contents").removeClass("qr");
+      // }
     },
   },
 };
@@ -117,6 +135,28 @@ body {
   }
 }
 
+.full-size {
+  background: #1ec89b;
+
+  .top-area {
+    background: #1ec89b !important;
+  }
+
+  .contents {
+  }
+}
+
+.full-size-white {
+  .contents {
+    padding-top: 0 !important;
+  }
+}
+
+.full-size-search-mom {
+  background: url("/images/baby-ing-bg.jpg");
+  background-size: cover;
+}
+
 header.header {
   position: fixed;
   top: 0;
@@ -157,6 +197,11 @@ input[type="password"] {
 
 .btn-white {
   @extend %button;
+
+  &:hover {
+    background: $primary;
+    color: #fff;
+  }
 
   border: 0;
 }
@@ -223,5 +268,23 @@ h1 {
   left: rem(-24px);
   height: rem(16px);
   background: #f5f5f5;
+}
+
+.modal-body {
+  padding: 2rem 1rem;
+}
+
+.modal-title {
+  position: relative;
+  left: rem(15px);
+  top: rem(20px);
+}
+
+.progress {
+  height: 0.7rem;
+
+  .progress-bar {
+    background: #1ec89b;
+  }
 }
 </style>

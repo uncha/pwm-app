@@ -1,27 +1,30 @@
 <template>
   <div>
-    <div id="search-mom" v-if="render == true">
+    <div
+      id="search-mom"
+      v-if="render == true"
+    >
       <side-bar :linked="linked"></side-bar>
-      <linked-mom :linked="linked"></linked-mom>
+      <!-- <linked-mom :linked="linked"></linked-mom> -->
       <div class="cont">
         <template v-if="linked.length == 0">
-        <!-- <p class="mt-5"><img src="/images/icon_mom.png" />엄마의 신호가 필요해요.</p> -->
+          <!-- <p class="mt-5"><img src="/images/icon_mom.png" />엄마의 신호가 필요해요.</p> -->
 
-        <div class="stay-connection text-center">
-          엄마의 신호가<br />
-          올때까지 잠시만<br />
-          기다려볼까요?
-        </div>
+          <h1>
+            엄마의 신호가
+            올때까지<br /> 잠시만
+            기다려볼까요?
+          </h1>
 
         </template>
         <template v-else>
           <template v-if="!questGroup">
-            <div class="blue-box stay-quest-box">
-              <p class="title">
-                아직,<br />
-                퀘스트가 도착하지<br />
+            <div class="stay-quest-box">
+              <h1>
+                아직,
+                퀘스트가<br /> 도착하지
                 않았습니다.<br />
-              </p>
+              </h1>
               <p class="description">
                 엄마가 퀘스트를 줄 때까지 <br />
                 잠깐만 기다려주세요.
@@ -31,58 +34,95 @@
         </template>
       </div>
 
-      <div class="stay" v-if="linkedComplete.length == 0">
+      <div
+        class="stay"
+        v-if="linkedComplete.length == 0"
+      >
         <p>
-          <img src="/images/icon_baby.png" />
-          <b-icon icon="three-dots" animation="cylon" font-scale="2" style="color:#bbb"></b-icon>
+          <img src="/images/icon-baby-face.svg" />
+          <b-icon
+            icon="three-dots"
+            animation="cylon"
+            font-scale="2"
+            style="color:#bbb"
+          ></b-icon>
         </p>
         <p class="txt">
-          엄마를 하염없이  기다리는 중…
+          엄마를 하염없이 기다리는 중…
         </p>
       </div>
-      <div class="stay" v-else>
+      <div
+        class="stay"
+        v-else
+      >
         <p>
-          <img src="/images/icon_baby.png" />
-          <b-icon icon="three-dots" animation="cylon" font-scale="2" style="color:#bbb"></b-icon>
+          <img src="/images/icon-baby-face.svg" />
+          <b-icon
+            icon="three-dots"
+            animation="cylon"
+            font-scale="2"
+            style="color:#bbb"
+          ></b-icon>
         </p>
         <p class="txt">
-          엄마의 퀘스트를  기다리는 중…
+          엄마를 하염없이 기다리는 중…
         </p>
       </div>
 
-      <b-modal id="linked-mom-modal" ref="linked-mom-modal" hide-header hide-footer centered  :no-close-on-backdrop="true">
+      <b-modal
+        id="linked-mom-modal"
+        ref="linked-mom-modal"
+        hide-header
+        hide-footer
+        centered
+        :no-close-on-backdrop="true"
+      >
         <template v-if="linkedStay.length > 0">
           <div class="text-center">
-            <p class="upload-image">
-                <template v-if="mom.profile_image">
-                    <img :src="profileImageURL" />
-                </template>
+            <p class="upload-image mb-0">
+              <template v-if="mom.profile_image">
+                <img
+                  class="profile-image"
+                  :style="{
+                    'background':`url(${profileImageURL})`,
+                  }"
+                />
+              </template>
             </p>
-            <p class="primary">{{mom.nick_name}}</p>
-            <p>엄마가 맞나요?</p>
+            <h1 class="mt-0 mb-1">{{mom.nick_name}}</h1>
+            <p class="question text-primary mb-6">엄마가 맞나요?</p>
           </div>
           <b-row>
-            <b-col class="p-2">
-              <b-button variant="light" @click="no">아니오</b-button>
+            <b-col class="">
+              <b-button
+                variant="light"
+                @click="no"
+              >아니에요</b-button>
             </b-col>
-              <b-col class="p-2">
-                <b-button variant="primary" @click="yes">네</b-button>
-              </b-col>
+            <b-col class="">
+              <b-button
+                variant="primary"
+                @click="yes"
+              >네, 맞아요</b-button>
+            </b-col>
           </b-row>
         </template>
         <template v-else>
           <div class="text-center">
-            <p class="upload-image">
-                <template v-if="mom.profile_image">
-                    <img :src="profileImageURL" />
-                </template>
-            </p>
+            <!-- <p class="upload-image">
+              <template v-if="mom.profile_image">
+                <img :src="profileImageURL" />
+              </template>
+            </p> -->
             <p class="primary">{{mom.nick_name}}</p>
             <p>연결이 완료 되었습니다.</p>
           </div>
           <b-row>
             <b-col class="p-2">
-              <b-button variant="primary">확인</b-button>
+              <b-button
+                variant="primary"
+                @click="linkedSuccess"
+              >확인</b-button>
             </b-col>
           </b-row>
         </template>
@@ -92,268 +132,180 @@
 </template>
 
 <script>
-import Sidebar from '@/components/baby/side-bar'
-import LinkedMom from '@/components/baby/linked-mom'
-  export default {
-    components: {
-      'linked-mom': LinkedMom,
-      'side-bar':Sidebar
+import Sidebar from "@/components/baby/side-bar";
+import LinkedMom from "@/components/baby/linked-mom";
+export default {
+  components: {
+    "linked-mom": LinkedMom,
+    "side-bar": Sidebar,
+  },
+  data() {
+    return {
+      linked: [],
+      questGroup: "",
+      mom: "",
+      render: false,
+      intervalId: "",
+    };
+  },
+  computed: {
+    authUser() {
+      return this.$store.getters["authUser"];
     },
-    data () {
-      return {
-        linked:[],
-        questGroup:'',
-        mom:'',
-        render:false,
-        intervalId:'',
+    profileImageURL() {
+      if (window.location.host == "localhost:3000") {
+        return `http://localhost:9102${this.mom.profile_image}`;
+      } else {
+        return this.mom.profile_image;
       }
     },
-    computed: {
-      authUser () {
-        return this.$store.getters['authUser']
-      },
-      profileImageURL () {
-          if(window.location.host == 'localhost:3000') {
-            return `http://localhost:9102${this.mom.profile_image}`
-          } else {
-            return this.mom.profile_image
-          }
-      },
-      linkedStay () {
-          let linked = _.filter(this.linked, item=>{
-            return item.status == 0
-          })
+    linkedStay() {
+      let linked = _.filter(this.linked, (item) => {
+        return item.status == 0;
+      });
 
-          return linked;
-      },
-      linkedComplete () {
-          let linked = _.filter(this.linked, item=>{
-            return item.status == 1
-          })
-
-          return linked;
-      },
+      return linked;
     },
-    mounted () {
-      this.init()
+    linkedComplete() {
+      let linked = _.filter(this.linked, (item) => {
+        return item.status == 1;
+      });
 
-      this.intervalId = window.setInterval(()=>{
-        this.init()
-      }, 1000 * 30)
+      return linked;
     },
-    methods: {
-      async init () {
-        this.linked = await this.loadData()
+  },
+  mounted() {
+    this.init();
 
-        if(this.linked.length > 0) {
-          this.questGroup = await this.loadQuestGroup()
+    this.intervalId = window.setInterval(() => {
+      this.init();
+    }, 1000 * 3);
+  },
+  methods: {
+    async init() {
+      this.linked = await this.loadData();
 
-          if(this.questGroup) this.$router.push({path:'/baby/quest/start'})
-          else this.render = true
+      if (this.linked.length > 0) {
+        this.questGroup = await this.loadQuestGroup();
 
-          this.mom = await this.loadMom()
-          console.log('THIS.MOM', this.mom)
-          this.$store.commit('Baby/setMom', this.mom)
+        if (this.questGroup) this.$router.push({ path: "/baby/quest/start" });
+        else this.render = true;
 
-          if(this.linkedStay.length > 0) {
-            this.$refs['linked-mom-modal'].show()
-          }
-        } else {
-          this.render = true
+        this.mom = await this.loadMom();
+        console.log("THIS.MOM", this.mom);
+        this.$store.commit("Baby/setMom", this.mom);
+
+        if (this.linkedStay.length > 0) {
+          this.$refs["linked-mom-modal"].show();
         }
-      },
-      loadData () {
-        return new Promise(resolve=>{
-          this.$axios.get(`/api/linked/baby`, {
+      } else {
+        this.render = true;
+      }
+    },
+    loadData() {
+      return new Promise((resolve) => {
+        this.$axios
+          .get(`/api/linked/baby`, {
             params: {
-              baby_nick_names:this.authUser,
-            }
-          }).then(res=>{
-            resolve(res.data)
+              baby_nick_names: this.authUser,
+            },
           })
-        })
-      },
-      loadMom () {
-        return new Promise(resolve=>{
-          this.$axios.get(`/api/user/${this.linked[0].mom_nick_name}`).then(res=>{
-            resolve(res.data[0])
-          })
-        })
-      },
-      loadQuestGroup () {
-        return new Promise(resolve=>{
-          this.$axios.get(`/api/selectQuestGroup/${this.linked[0].id}`).then(res=>{
-            resolve(res.data[0])
-          })
-        })
-      },
-      updateLinkedStatus () {
-        return new Promise(resolve=>{
-          this.$axios.post(`/api/update-linked/${this.linked[0].id}`, {
-            status:1,
-          }).then(res=>{
-            resolve(res.data)
-          })
-        })
-      },
-      deleteLinkedStatus () {
-        return new Promise(resolve=>{
-          this.$axios.post(`/api/delete-linked/${this.linked[0].id}`).then(res=>{
-            resolve(res.data)
-          })
-        })
-      },
-      async yes () {
-        await this.updateLinkedStatus();
-        this.$refs['linked-mom-modal'].hide()
-        this.linked = await this.loadData()
-      },
-      async no () {
-        await this.deleteLinkedStatus();
-        this.$refs['linked-mom-modal'].hide()
-      },
+          .then((res) => {
+            resolve(res.data);
+          });
+      });
     },
-    destroyed () {
-      window.clearInterval(this.intervalId)
+    loadMom() {
+      return new Promise((resolve) => {
+        this.$axios
+          .get(`/api/user/${this.linked[0].mom_nick_name}`)
+          .then((res) => {
+            resolve(res.data[0]);
+          });
+      });
     },
-  }
+    loadQuestGroup() {
+      return new Promise((resolve) => {
+        this.$axios
+          .get(`/api/selectQuestGroup/${this.linked[0].id}`)
+          .then((res) => {
+            resolve(res.data[0]);
+          });
+      });
+    },
+    updateLinkedStatus() {
+      return new Promise((resolve) => {
+        this.$axios
+          .post(`/api/update-linked/${this.linked[0].id}`, {
+            status: 1,
+          })
+          .then((res) => {
+            resolve(res.data);
+          });
+      });
+    },
+    deleteLinkedStatus() {
+      return new Promise((resolve) => {
+        this.$axios
+          .post(`/api/delete-linked/${this.linked[0].id}`)
+          .then((res) => {
+            resolve(res.data);
+          });
+      });
+    },
+    async yes() {
+      await this.updateLinkedStatus();
+      this.$refs["linked-mom-modal"].hide();
+      this.linked = await this.loadData();
+    },
+    async no() {
+      await this.deleteLinkedStatus();
+      this.$refs["linked-mom-modal"].hide();
+    },
+    linkedSuccess() {
+      this.$refs["linked-mom-modal"].hide();
+    },
+  },
+  destroyed() {
+    window.clearInterval(this.intervalId);
+  },
+};
 </script>
 
 <style lang="scss" scoped>
- 
-
-#search-mom {
-  margin-top:rem(168px);
-}
-
-.title {
-  margin-top: rem(30px);
-  font-size:rem(32px);
-  line-height: rem(44px);
-  position: relative;
-  margin-bottom: rem(60px);
-
-  .title-img {
-    position: absolute;
-    top:rem(40px);
-    right: rem(40px);
-
-    img {
-      width: rem(100px);
-    }
-  }
-}
-
-.description {
-  font-size: rem(16px);
-  line-height: rem(24px);
-  margin-top:rem(30px);
-}
-
-.stay-connection {
-  margin-top: rem(40px);
-  background:url('/images/baby-ing-mom.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  border-radius: rem(8px);
-  color:#FFF;
-  font-size: rem(24px);
-  line-height: ren(30px);
-  padding:rem(112px) 0 rem(250px) 0;
-}
-
 .stay {
-  padding:rem(30px) rem(20px);
-
-  img {
-    width: rem(36px);
-  }
+  position: fixed;
+  bottom: 50px;
 
   .txt {
-    font-size: rem(12px);
-    color:#1773e2;
+    color: $primary;
     text-decoration: underline;
-  }
-}
-
-.modal {
-  .upload-image {
-      width: rem(100px);
-      height: rem(100px);
-      background: #f1cef5;
-      border-radius: 100%;
-      overflow: hidden;
-      z-index:5;
-      margin::0 auto;
-
-      img {
-          width:100%;
-      }
-  }
-}
-
-
-.btn-create-quest {
-  position: absolute;
-  bottom:rem(80px);
-  display: block;
-  text-align: center;
-  width: rem(234px);
-  height: rem(234px);
-  border-radius: 100%;
-  background: #ddd;
-  margin:0 auto;
-  left:0;
-  right:0;
-  text-decoration: none;
-
-  &.active {
-    background: #FFF;
-    border: 1px solid #50bfd0;
-    width: rem(248px);
-    height: rem(248px);
-
-    .gradient-circle {
-      background:linear-gradient(130deg, #61faa9, #3f85f9, #f71cba);
-      width:rem(234px);
-      height:rem(234px);
-      position: relative;
-      left:rem(6px);
-      top:rem(6px);
-      border-radius: 100%;
-    }
-  }
-
-  .create-text {
-    font-size: rem(36px);
-    line-height: rem(48px);
-    color:#FFF;
-    padding-top:rem(50px);
-    display: inline-block;
+    font-size: 12px;
+    font-family: NotoSansMonoCJKkr-Regular;
   }
 }
 
 .stay-quest-box {
+  .description {
+    color: $primary;
+    margin-top: rem(-30px);
+  }
+}
 
+.profile-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  margin: 0 auto;
+  background-size: cover !important;
+}
+
+.question {
+  font-size: rem(12px);
+  font-weight: 400;
+  font-family: NotoSansMonoCJKkr-Regular;
 }
 </style>
 
 <style lang="scss">
- 
-#linked-mom-modal{
-  .upload-image {
-      width: rem(100px);
-      height: rem(100px);
-      background: #f1cef5;
-      border-radius: 100%;
-      overflow: hidden;
-      z-index:5;
-      margin::0 auto;
-
-      img {
-          width:100%;
-          height: 100%;
-      }
-  }
-}
 </style>

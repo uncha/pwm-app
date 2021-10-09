@@ -1,84 +1,85 @@
 <template>
   <div>
+    <top
+      :linked="linked"
+      :backURL="$route.query.back"
+    ></top>
     <div class="quest-wrapper">
-      <div class="profile-image children">
-        <div
-          style="background-size:cover; width:100%; height:100%;"
-          :style="{'background':`url(${getProfileImageURL(selectLink.profile_image)})`}"
-        >
-        </div>
-      </div>
-      <div class="text-center children-name">{{selectLink.baby_nick_names}}</div>
-      <div class="text-center mb-6 ing">
-        <span>퀘스트 진행중</span>
-      </div>
-      <div class="current-quest">
-        <p>현재 수행중 퀘스트</p>
-        <p class="quest-name">{{ingQuest[0] && ingQuest[0].title}}</p>
+      <b-row>
+        <b-col>
+          <p class="tit">퀘스트 완료현황</p>
+        </b-col>
+        <b-col class="text-right">
+        </b-col>
+      </b-row>
+
+      <div class="quest-list-total">
+        <ul v-if="selectGroup">
+          <li
+            v-for="i in selectGroup.success_count"
+            :key="`cnt-${i}`"
+          >
+            <template v-if="i <= completeCount">
+              <img
+                class="ico"
+                src="/images/ico-quest-success.svg"
+              />
+            </template>
+            <template v-else>
+              <img
+                class="ico"
+                src="/images/ico-quest-notyet.svg"
+              />
+            </template>
+          </li>
+        </ul>
       </div>
 
       <div class="divine"></div>
 
       <div class="quest-list">
-        <div
-          v-if="isFirstQuest == true"
-          class="text-center"
-        >
-          <img src="/images/img-carrot.svg" />
-          <p class="first-message">
-            {{selectLink.baby_nick_names}}와 함께하는 첫 퀘스트가 진행중입니다.<br />
-            당근을 얻지 못해도 괜찮아요~<br />
-            함께하는 과정을 재미있게 즐겨 주세요!<br />
-            <br />
-            아이와 함께하는 퀘스트는 무제한이니까요
-          </p>
-        </div>
+        <p>퀘스트 달성현황</p>
         <ul class="list">
-          <li
-            @click="questConfirm(item.id, item)"
-            v-for="(item, i) in executionQuestList"
-            :key="`confirm-${i}`"
-          >
+          <li v-for="item in executionQuestList">
             <template v-if="item.complete_state == 1">
               <b-row no-gutters>
                 <b-col
-                  class="date"
+                  class=""
                   cols="2"
                 >
                   <img
-                    class="ico"
-                    src="/images/ico-quest-success.svg"
-                    v-if="item.success_state == 1"
-                  />
-                  <img
-                    class="ico"
-                    src="/images/ico-quest-notyet.svg"
-                    v-else
+                    class="execution-image"
+                    :src="executionPicURL(item.execution_pic)"
                   />
                 </b-col>
                 <b-col
-                  class="quest-title"
-                  :class="{'success':item.success_state==1, 'failed':item.success_state==2}"
-                  cols="7"
-                >{{item.title}}
+                  class="date"
+                  cols="10"
+                >
+                  <p class="mb-0">{{getFormatDate(item.execution_date)}}</p>
+                  <p
+                    class="quest-title"
+                    :class="{'success':item.success_state==1, 'failed':item.success_state==2}"
+                    cols="7"
+                  >{{item.title}}
+                  </p>
                 </b-col>
+
               </b-row>
             </template>
           </li>
         </ul>
       </div>
 
-      <div class="bottom-wrap text-center">
-        <a
-          class="quest-status"
-          href="#"
-          @click.prevent="goConfirm"
-        >
-          {{selectGroup.success_count}}개 중 <span class="text-primary">{{successCount}}</span>개달성
-          <img src="/images/btn-next.svg" />
-        </a>
-      </div>
+      <div class="divine"></div>
 
+      <div class="gift">
+        <p>퀘스트 보상</p>
+        <img
+          class="upload-image"
+          :src="giftImageURL"
+        />
+      </div>
     </div>
 
     <b-modal
@@ -92,7 +93,7 @@
         <p class="question">퀘스트를 달성했나요?</p>
       </div>
 
-      <div class="quest-image">
+      <div>
         <img
           class="confirm-data-image"
           :src="confirmDataImageURL"
@@ -158,23 +159,24 @@
 </template>
 
 <script type="text/javascript">
-import LoginCheck from "@/mixins/loginCheck.js";
-import Top from "@/components/top";
+// import LoginCheck from "@/mixins/loginCheck.js";
+
+import Top from "@/components/baby/top";
 
 export default {
-  mixins: [LoginCheck],
+  //mixins: [LoginCheck],
   components: {
     top: Top,
   },
   data() {
     return {
       questList: [],
-      executionQuestList: [],
       selectGroup: "",
       confirmQuest: "",
       links: [],
       confirmData: "",
       intervalId: "",
+      executionQuestList: [],
     };
   },
   computed: {
@@ -199,7 +201,7 @@ export default {
       }
     },
     successCount() {
-      let successQuest = _.filter(this.executionQuestList, (item) => {
+      let successQuest = _.filter(this.questList, (item) => {
         return item.success_state == 1;
       });
       return successQuest.length;
@@ -221,6 +223,11 @@ export default {
 
       return nextQuest;
     },
+    executionList() {
+      return _.filter(this.questList, (item) => {
+        return item.complete_sate != 0;
+      });
+    },
     successIndex() {
       let id = 0;
       let cnt = 0;
@@ -234,54 +241,32 @@ export default {
 
       return id == this.selectGroup.success_count ? id : -1;
     },
-    ingQuest() {
-      return _.filter(this.executionQuestList, (item, i) => {
-        console.log("item", item);
-        return (
-          item.execution_date ==
-          moment().hour(0).minutes(0).seconds(0).format("YYYY-MM-DD HH:mm:ss")
-        );
-      });
+    linked() {
+      return this.$store.getters["Baby/linked"];
     },
-    executionList() {
+    completeCount() {
       return _.filter(this.executionQuestList, (item) => {
-        console.log("item", item);
-        return item.success_state != 0;
-      });
-    },
-    isFirstQuest() {
-      let isFirst = true;
-
-      _.forEach(this.executionQuestList, (item) => {
-        if (item.complete_state != 0) isFirst = false;
-      });
-
-      return isFirst;
+        return item.success_state == 1;
+      }).length;
     },
   },
   mounted() {
     this.init();
 
-    this.intervalId = setInterval(() => {
-      this.init();
-    }, 1000 * 3);
+    console.log("this.$router", this.$route);
+
+    // this.intervalId = setInterval(() => {
+    //   this.init();
+    // }, 1000 * 3);
   },
   methods: {
     async init() {
-      let selectGroup = await this.loadSelectGroup(this.selectLink);
+      let selectGroup = await this.loadQuestGroup();
       this.selectGroup = selectGroup[0];
       this.questList = await this.loadQuestList(this.selectGroup);
       this.executionQuestList = await this.loadExecutionQuestList(
         this.selectGroup
       );
-
-      let newExecutionQuest = _.find(this.executionQuestList, (item) => {
-        return item.success_state == 0 && item.complete_state == 1;
-      });
-      console.log("newExecutionQuest", newExecutionQuest);
-      if (newExecutionQuest) {
-        this.questConfirm(newExecutionQuest.id, newExecutionQuest);
-      }
 
       await this.$axios
         .get(`/api/linked/mom`, {
@@ -292,48 +277,11 @@ export default {
         .then((res) => {
           this.links = res.data;
           console.log("RES.DATA4444", res);
-
-          this.completeCheck();
+          //this.completeCheck();
         });
     },
-    // checkNewQuest() {
-    //   let diff = moment().diff(moment(this.selectGroup.start_date), "days");
-
-    //   for (let i = 0; i <= diff; i++) {
-    //     let isEmptyQuest = true;
-    //     let checkDate = moment(this.selectGroup.start_date)
-    //       .add(i, "day")
-    //       .hour(0)
-    //       .minutes(0)
-    //       .seconds(0)
-    //       .format("YYYY-MM-DD HH:mm:ss");
-
-    //     console.log("checkDate", checkDate);
-
-    //     _.forEach(this.executionQuestList, (item) => {
-    //       if (item.execution_date == checkDate) {
-    //         isEmptyQuest = false;
-    //       }
-    //     });
-
-    //     console.log("isEmptyQuest", isEmptyQuest);
-    //     if (isEmptyQuest == true) {
-    //       let randomQuest = _.shuffle(this.questList);
-
-    //       this.$axios
-    //         .post("/api/executionQuest", {
-    //           title: randomQuest[0].title,
-    //           group_id: this.selectGroup.id,
-    //           execution_date: checkDate,
-    //         })
-    //         .then((res) => {
-    //           console.log("res.data", res.data);
-    //         });
-    //     }
-    //   }
-    // },
     questConfirm(questId, confirmData) {
-      this.confirmQuest = _.find(this.executionQuestList, (item) => {
+      this.confirmQuest = _.find(this.questList, (item) => {
         return item.id == questId;
       });
 
@@ -343,6 +291,15 @@ export default {
       //   this.$refs['modal-quest-confirm'].show()
       // }
       this.$refs["modal-quest-confirm"].show();
+    },
+    loadQuestGroup() {
+      return new Promise((resolve) => {
+        this.$axios
+          .get(`/api/selectQuestGroup/${this.linked[0].id}`)
+          .then((res) => {
+            resolve(res.data);
+          });
+      });
     },
     loadSelectGroup(link) {
       return new Promise((resolve) => {
@@ -363,6 +320,8 @@ export default {
       });
     },
     loadExecutionQuestList(group) {
+      if (!group) return [];
+
       return new Promise((resolve) => {
         this.$axios.get(`/api/executionQuest/${group.id}`).then((res) => {
           let list = _.sortBy(res.data, (item) => {
@@ -399,7 +358,7 @@ export default {
     async handleSuccess() {
       console.log(this.confirmQuest);
       this.$axios
-        .post(`/api/executionQuestConfirm/${this.confirmQuest.id}`, {
+        .post(`/api/selectQuest/${this.confirmQuest.id}`, {
           success_state: 1,
         })
         .then((res) => {
@@ -409,7 +368,7 @@ export default {
     },
     async handleFailed() {
       this.$axios
-        .post(`/api/executionQuestConfirm/${this.confirmQuest.id}`, {
+        .post(`/api/selectQuest/${this.confirmQuest.id}`, {
           success_state: 2,
         })
         .then((res) => {
@@ -419,11 +378,8 @@ export default {
     },
     async resetQuestList() {
       this.questList = await this.loadQuestList(this.selectGroup);
-      this.executionQuestList = await this.loadExecutionQuestList(
-        this.selectGroup
-      );
 
-      this.completeCheck();
+      //this.completeCheck();
     },
     executionPicURL(url) {
       if (window.location.host == "localhost:3000") {
@@ -434,7 +390,10 @@ export default {
     },
     completeCheck() {
       this.$nextTick(() => {
-        if (this.successCount == this.selectGroup.success_count) {
+        if (
+          this.successCount == this.questList.length ||
+          this.successCount == this.selectGroup.success_count
+        ) {
           console.log("complete");
 
           this.$refs["modal-quest-complete"].show();
@@ -450,22 +409,8 @@ export default {
           state: "1",
         })
         .then((res) => {
-          this.$router.push({ path: "/mom/quest/ing/complete" });
+          this.$router.push({ path: "/baby/quest/complete" });
         });
-    },
-    goConfirm() {
-      if (this.selectGroup.complete_state == "1") {
-        this.$router.push({ path: "/mom/quest/ing/complete" });
-      } else {
-        this.$router.push({ path: "/mom/quest/ing" });
-      }
-    },
-    getProfileImageURL(url) {
-      if (window.location.host == "localhost:3000") {
-        return `http://localhost:9102${url}`;
-      } else {
-        return url;
-      }
     },
   },
   destroyed() {
@@ -485,6 +430,8 @@ export default {
   padding: rem(30px) 0;
 
   .date {
+    position: relative;
+    top: rem(2px);
     font-size: rem(16px);
     margin-bottom: rem(10px);
   }
@@ -516,11 +463,6 @@ export default {
 }
 
 .quest-list {
-  > .list {
-    height: 240px;
-    overflow-y: auto;
-  }
-
   margin-top: rem(25px);
 
   .t1 {
@@ -551,14 +493,11 @@ export default {
   .date {
     font-size: rem(13px);
     line-height: rem(48px);
-    color: #000;
+    color: #aaa;
     font-family: NotoSansCJKkr-Regular;
   }
 
   .quest-title {
-    font-size: rem(14px);
-    line-height: rem(48px);
-
     &.success {
       color: #497ff5;
       text-decoration: line-through;
@@ -577,7 +516,7 @@ export default {
 
   img {
     max-width: 100%;
-    border-radius: rem(5px);
+    border-radius: rem(15px);
   }
 }
 .modal-body {
@@ -629,77 +568,5 @@ export default {
   box-shadow: 2px 2px 10px 5px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   margin-bottom: rem(40px);
-}
-
-.current-quest {
-  background: #1ec89b;
-  border-radius: rem(16px);
-  padding: rem(14px) rem(14px) rem(36px) rem(14px);
-  color: #fff;
-  margin-bottom: rem(30px);
-
-  p {
-    margin-bottom: 0;
-    font-weight: 400;
-  }
-
-  .quest-name {
-    font-weight: 500;
-    margin-top: rem(20px);
-    font-size: rem(20px);
-  }
-}
-
-.quest-status {
-  color: #000;
-}
-
-.first-message {
-  color: #aaa;
-  font-size: rem(14px);
-  margin-top: rem(16px);
-}
-
-.profile-image {
-  width: rem(80px);
-  height: rem(80px);
-  position: relative;
-  margin: 0 auto;
-
-  > div {
-    background-size: cover !important;
-    border-radius: 100%;
-  }
-}
-
-.children-name {
-  font-size: rem(20px);
-  padding: rem(5px);
-  font-weight: 700;
-}
-
-.ing {
-  > span {
-    background: #1d7ff1;
-    color: #fff;
-    border-radius: rem(12px);
-    font-size: rem(14px);
-    padding: rem(2px) rem(10px);
-  }
-}
-
-.list {
-  padding-bottom: rem(150px);
-}
-
-.bottom-wrap {
-  padding-top: rem(5px);
-  background: #fff;
-}
-
-.quest-image {
-  max-height: 300px;
-  overflow: auto;
-  max-width: 100%;
 }
 </style>

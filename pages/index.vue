@@ -1,16 +1,19 @@
 <template>
   <div class="container">
-    <p class="title text-center"><img src="/images/title.svg" /></p>
+    <p
+      class="title text-center"
+      @click="$router.push({path:'/join'})"
+    ><img src="/images/mom-title.svg" /></p>
 
     <div class="social text-center">
       <!-- <kakao-login class="mt-1" /> -->
-      <!-- <naver-login class="mt-1" /> -->
+      <naver-login class="mt-1" />
       <!-- <google-login /> -->
       <!-- <apple-login class="mt-1" /> -->
-      <b-button
+      <!-- <b-button
         variant="primary"
         @click="$router.push({path:'/join'})"
-      >시작하기</b-button>
+      >시작하기</b-button> -->
     </div>
   </div>
 </template>

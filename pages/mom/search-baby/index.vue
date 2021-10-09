@@ -20,7 +20,7 @@
           </p>
         </div>
 
-        <div class="bottom-wrap full">
+        <div class="bottom-wrap">
           <b-button
             type="submit"
             class="mt-4 text-center"

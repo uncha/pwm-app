@@ -141,3 +141,13 @@
 .modal.show .modal-dialog {
   transform:translate(0, 0) !important;
 }
+
+.inline-col {
+  .col:first-child {
+    flex:0;
+  }
+  .col {
+    flex-grow: initial;
+    flex:1;
+  }
+}

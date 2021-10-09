@@ -1,6 +1,8 @@
 <template>
   <div id="create-nickname">
     <top></top>
+    <h1>프로필 사진과<br>
+      닉네임을 정해 주세요!</h1>
     <b-form @submit.stop.prevent="onSubmit">
       <b-row>
         <b-col cols="3">
@@ -9,6 +11,7 @@
               <template v-if="uploadImage">
                 <!-- <img :src="profileImageURL" /> -->
                 <p
+                  class="profile-image"
                   style="width:100%; height:100%"
                   :style="{'background':`url(${profileImageURL})`, 'background-size':'cover'}"
                 ></p>
@@ -59,7 +62,7 @@
           </div>
         </b-col>
       </b-row>
-      <div class="bottom-wrap full">
+      <div class="bottom-wrap">
         <template v-if="confirmed === ''">
           <b-button
             class="position-bottom"
@@ -103,10 +106,10 @@ export default {
       form: {
         profile_image: [],
         nick_name: "",
-        profile_image_path: "",
+        profile_image_path: "/uploads/empty-profile.svg",
       },
       confirmed: "",
-      uploadImage: "",
+      uploadImage: "/uploads/empty-profile.svg",
     };
   },
   validations: {
@@ -153,6 +156,7 @@ export default {
           this.confirmed = false;
         } else {
           this.confirmed = true;
+          this.onStart();
         }
       });
     },
@@ -162,6 +166,8 @@ export default {
       this.form.socialId = this.socialId;
 
       let promises = [];
+
+      console.log("this.form", this.form);
 
       this.$axios.post("/api/user", this.form).then((res) => {
         this.login();
@@ -194,8 +200,18 @@ export default {
             },
           })
           .then((res) => {
-            this.uploadImage = `/uploads/${res.data}`;
-            this.form.profile_image_path = `/uploads/${res.data}`;
+            if (res.data) {
+              this.uploadImage = `/uploads/${res.data}`;
+              this.form.profile_image_path = `/uploads/${res.data}`;
+            } else {
+              this.uploadImage = `/uploads/empty-profile.svg`;
+              this.form.profile_image_path = `/uploads/empty-profile.svg`;
+            }
+
+            console.log(
+              "this.form.profile_image_path",
+              this.form.profile_image_path
+            );
 
             this.$forceUpdate();
           });
@@ -204,6 +220,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.profile-image {
+  background-size: cover !important;
+}
+</style>
 
 <style lang="scss">
 .des {

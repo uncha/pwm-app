@@ -11,7 +11,7 @@
       >
         <div
           class="swiper-slide"
-          v-for="i in questList.length"
+          v-for="i in 100"
         >
           <span class="number">{{i}}</span>
         </div>
@@ -97,8 +97,8 @@ export default {
     font-size: rem(100px) !important;
     color: #ccc;
     margin: 0 !important;
-    height: rem(120px) !important;
-    line-height: rem(120px) !important;
+    height: rem(139px) !important;
+    line-height: rem(139px) !important;
 
     &.swiper-slide-active {
       background: #ebf4ff !important;

@@ -1,11 +1,11 @@
 <template>
   <div id="gift">
-    <top></top>
+    <top :whiteBg="true"></top>
     <template v-if="uploadImage">
       <h1>
         이 보상으로 괜찮나요?
       </h1>
-      <p class="text-center">
+      <p class="text-center upload-image-wrap">
         <img
           class="upload-image"
           :src="giftImageURL"
@@ -38,27 +38,28 @@
         <p class="description">평소에 가지고 싶어했던 것을<br />
           캡쳐하거나 찍어서 올려주세요.</p>
       </div>
-      <!-- <div>
-        <img src="/images/pic-box.svg" />
-      </div> -->
-      <b-row>
-        <b-col>
-          <div class="profile-image-wrapper">
-            <div class="box-file-input"><label>
-                <b-form-group :label="''">
-                  <b-form-file
-                    @change="onUploadImage"
-                    accept="image/jpeg, image/png, image/gif"
-                    v-model="form.profile_image"
-                    class="mt-3"
-                    plain
-                  ></b-form-file>
-                </b-form-group>
-              </label>
-            </div>
+      <p class="text-center mt-5">
+        <img
+          class="img-gift-box"
+          src="/images/gift-box.jpg"
+        />
+      </p>
+      <div class="bottom-wrap ">
+        <div class="profile-image-wrapper">
+          <div class="box-file-input"><label>
+              <b-form-group :label="''">
+                <b-form-file
+                  @change="onUploadImage"
+                  accept="image/jpeg, image/png, image/gif"
+                  v-model="form.profile_image"
+                  class="mt-3"
+                  plain
+                ></b-form-file>
+              </b-form-group>
+            </label>
           </div>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -175,6 +176,10 @@ export default {
       padding-left: 10px;
     }
   }
+
+  .img-gift-box {
+    max-width: 100%;
+  }
 }
 </style>
 
@@ -193,9 +198,13 @@ export default {
   margin-bottom: 0;
 }
 
-.upload-image {
-  border-radius: rem(5px);
-  max-width: 100%;
+.upload-image-wrap {
+  padding-bottom: rem(150px);
+  .upload-image {
+    border-radius: rem(16px);
+    max-width: 100%;
+    max-height: rem(550px);
+  }
 }
 
 .form-wrap {
@@ -208,5 +217,8 @@ export default {
     bottom: rem(47px);
     left: calc(100% - 100px);
   }
+}
+
+.bottom-wrap {
 }
 </style>

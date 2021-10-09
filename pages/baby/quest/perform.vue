@@ -1,25 +1,26 @@
 <template>
   <div id="perform">
-    <div class="header" :class="{'image-upload': uploadImage}">
-      <a href="#" @click.prevent="goBack()">
-        <b-icon icon="chevron-left"></b-icon>
-        수행 퀘스트
-      </a>
-      <p v-if="unSuccessQuest[0]">"{{unSuccessQuest[0].title}}"</p>
-    </div>
-
+    <top
+      :linked="linked"
+      :backURL="'/baby/quest/confirm'"
+    ></top>
     <template v-if="!uploadImage">
       <div class="quest-perform">
-        <p class="text-danger">퀘스트 완료</p>
-        <p class="description">퀘스트를 완료하였으면, <br />
-        사진을 찍어서 엄마에게 <br />
-        보내주세요.</p>
+        <h1 class="description">퀘스트를 완료하였으면, <br />
+          사진을 찍어서 엄마에게 <br />
+          보내주세요.</h1>
       </div>
       <div class="profile-image-wrapper">
-          <div class="box-file-input"><label>
-              <b-form-group :label="''">
-                  <b-form-file @change="onUploadImage" accept="image/jpeg, image/png, image/gif" v-model="form.profile_image" class="mt-3" plain></b-form-file>
-              </b-form-group>
+        <div class="box-file-input"><label>
+            <b-form-group :label="''">
+              <b-form-file
+                @change="onUploadImage"
+                accept="image/jpeg, image/png, image/gif"
+                v-model="form.profile_image"
+                class="mt-3"
+                plain
+              ></b-form-file>
+            </b-form-group>
           </label>
           <p>
             사진등록
@@ -29,18 +30,27 @@
     </template>
 
     <template v-else>
-      <p class="text-center upload-image-wrap">
-        <img class="upload-image" :src="giftImageURL" />
-      </p>
-      <p class="text-center">이 사진으로 엄마에게 <br />
-      보낼까요?</p>
 
-      <b-row class="buttons">
+      <p class="send-picture-text">이 사진으로 엄마에게
+        보낼까요?</p>
+      <p class="text-center upload-image-wrap">
+        <img
+          class="upload-image"
+          :src="giftImageURL"
+        />
+      </p>
+      <b-row class="bottom-wrap">
         <b-col cols="5">
-          <b-button variant="light" @click="no">다시찍기</b-button>
+          <b-button
+            variant="light"
+            @click="no"
+          >다시찍기</b-button>
         </b-col>
         <b-col cols="7">
-          <b-button variant="primary" @click="yes">네</b-button>
+          <b-button
+            variant="primary"
+            @click="yes"
+          >네</b-button>
         </b-col>
       </b-row>
     </template>
@@ -49,141 +59,168 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        form: {
-          profile_image:''
-        },
-        uploadImage:'',
-        quest:'',
-        questGroup:'',
+import Top from "@/components/baby/top";
+
+export default {
+  components: {
+    top: Top,
+  },
+  data() {
+    return {
+      form: {
+        profile_image: "",
+      },
+      uploadImage: "",
+      quest: "",
+      questGroup: "",
+      executionQuestList: [],
+    };
+  },
+  computed: {
+    linked() {
+      return this.$store.getters["Baby/linked"];
+    },
+    giftImageURL() {
+      if (window.location.host == "localhost:3000") {
+        return `http://localhost:9102${this.uploadImage}`;
+      } else {
+        return this.uploadImage;
       }
     },
-    computed: {
-      linked () {
-        return this.$store.getters['Baby/linked']
-      },
-      giftImageURL () {
-          if(window.location.host == 'localhost:3000') {
-            return `http://localhost:9102${this.uploadImage}`
-          } else {
-            return this.uploadImage
-          }
-      },
-      unSuccessQuest () {
-        return _.filter(this.quest, item =>{
-          return item.success_state == 0
-        })
-      },
+    unSuccessQuest() {
+      return _.filter(this.executionQuestList, (item) => {
+        return item.success_state == 0;
+      });
     },
-    async mounted () {
-      this.questGroup = await this.loadQuestGroup()
-      this.quest = await this.loadQuest()
+  },
+  async mounted() {
+    this.questGroup = await this.loadQuestGroup();
+    this.quest = await this.loadQuest();
+    this.executionQuestList = await this.loadExecutionQuestList();
+  },
+  methods: {
+    loadQuestGroup() {
+      return new Promise((resolve) => {
+        this.$axios
+          .get(`/api/selectQuestGroup/${this.linked[0].id}`)
+          .then((res) => {
+            resolve(res.data);
+          });
+      });
     },
-    methods: {
-      loadQuestGroup () {
-        return new Promise(resolve=>{
-          this.$axios.get(`/api/selectQuestGroup/${this.linked[0].id}`).then(res=>{
-            resolve(res.data)
+    loadQuest() {
+      return new Promise((resolve) => {
+        this.$axios
+          .get(`/api/selectQuest/${this.questGroup[0].id}`)
+          .then((res) => {
+            let list = _.sortBy(res.data, (item) => {
+              return item.start_date;
+            });
+
+            resolve(list);
+          });
+      });
+    },
+    loadExecutionQuestList() {
+      return new Promise((resolve) => {
+        this.$axios
+          .get(`/api/executionQuest/${this.questGroup[0].id}`)
+          .then((res) => {
+            let list = _.sortBy(res.data, (item) => {
+              return item.start_date;
+            });
+
+            resolve(list);
+          });
+      });
+    },
+    onUploadImage() {
+      let formData = new FormData();
+
+      window.setTimeout(() => {
+        formData.append("profile_image", this.form.profile_image);
+        console.log("THIS.FORM.PROFILE_IMAGE", this.form.profile_image);
+
+        this.$axios
+          .post("/api/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           })
+          .then((res) => {
+            this.uploadImage = `/uploads/${res.data}`;
+            this.imageFile = `/uploads/${res.data}`;
+
+            this.$forceUpdate();
+          });
+      });
+    },
+    no() {
+      this.uploadImage = ``;
+      this.imageFile = ``;
+    },
+    yes() {
+      this.$axios
+        .post(`/api/executionQuest/${this.unSuccessQuest[0].id}`, {
+          execution_pic: this.uploadImage,
         })
-      },
-      loadQuest () {
-        return new Promise(resolve =>{
-          this.$axios.get(`/api/selectQuest/${this.questGroup[0].id}`).then(res=>{
-            let list = _.sortBy(res.data, item=>{
-              return item.start_date
-            })
-
-            resolve(list)
-          })
-        })
-      },
-      onUploadImage() {
-          let formData = new FormData();
-
-          window.setTimeout(()=>{
-              formData.append('profile_image', this.form.profile_image);
-              console.log('THIS.FORM.PROFILE_IMAGE', this.form.profile_image)
-
-              this.$axios.post('/api/upload', formData,
-              {
-                  headers: {
-                      'Content-Type': 'multipart/form-data'
-                  }
-              }).then(res=>{
-                  this.uploadImage = `/uploads/${res.data}`
-                  this.imageFile = `/uploads/${res.data}`
-
-                  this.$forceUpdate();
-              })
-          })
-      },
-      no () {
-        this.uploadImage = ``
-        this.imageFile = ``
-      },
-      yes () {
-        this.$axios.post(`/api/executionQuest/${this.unSuccessQuest[0].id}`, {
-          execution_date:moment().format('YYYY-MM-DD'),
-          execution_pic:this.uploadImage,
-          questGroupId:this.questGroup[0].id,
-        }).then(res=>{
-          this.$router.push({path:'/baby/quest/confirm'})
-        })
-      },
-    }
-  }
+        .then((res) => {
+          this.$router.push({ path: "/baby/quest/confirm" });
+        });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
- 
-
 #perform {
   .profile-image-wrapper {
-      position: relative;
-      margin:rem(90px) auto rem(33px);
+    position: relative;
+    margin: rem(90px) auto rem(33px);
+    width: rem(100px);
+    height: rem(100px);
 
-      .box-file-input {
-          position: absolute;
-          z-index: 6;
-          text-align: center;
-          left:0;
-          right:0;
-      }
+    .box-file-input {
+      position: absolute;
+      z-index: 6;
+      text-align: center;
+      left: 0;
+      right: 0;
+      width: rem(100px);
+      height: rem(100px);
+    }
 
-      .box-file-input .form-group {
-          margin-bottom: 0;
-      }
+    .box-file-input .form-group {
+      margin-bottom: 0;
+    }
 
-      .box-file-input label{
-        display:inline-block;
-        background:#497ff5;
-        color:#fff;
-        cursor:pointer;
-        border-radius: 100%;
-      }
+    .box-file-input label {
+      display: inline-block;
+      background: #497ff5;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 100%;
+    }
 
-      .box-file-input label:after{
-          background-size: rem(64px) rem(64px);
-          display: inline-block;
-          background-position: 0 0;
-          background-repeat: no-repeat;
-          width: rem(64px);
-          height: rem(59px);
-          content: "";
-          background-image: url(/images/icon_camera_02.png);
-      }
+    .box-file-input label:after {
+      background-size: rem(42.75px) rem(38px);
+      display: inline-block;
+      background-position: rem(30px) rem(30px);
+      background-repeat: no-repeat;
+      width: rem(100px);
+      height: rem(95px);
+      content: "";
+      background-image: url(/images/icon-camera.svg);
+    }
 
-      .box-file-input input[type="file"]{
-        display:none;
-      }
+    .box-file-input input[type="file"] {
+      display: none;
+    }
 
-      .box-file-input .filename{
-        display:inline-block;
-        padding-left:10px;
-      }
+    .box-file-input .filename {
+      display: inline-block;
+      padding-left: 10px;
+    }
   }
 
   .buttons {
@@ -195,55 +232,29 @@
 </style>
 
 <style lang="scss" scoped>
- 
-
 .upload-image-wrap {
+  position: relative;
+
+  &:after {
+    content: "";
+    background: url("/images/icon-carrot2.svg");
+    position: absolute;
+    bottom: rem(-50px);
+    right: 0;
+    width: 127px;
+    height: 127px;
+  }
+
   .upload-image {
-    width:100%;
-    border-radius: rem(8px);
-    box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.2);
+    max-width: 100%;
+    border-radius: rem(16px);
+    max-height: rem(350px);
   }
 }
 
-.header {
-  margin: 0 rem(-24px);
-  padding:rem(30px) rem(24px);
-  background: #497ff5;
-  color:#FFF;
-  box-shadow: 2px 2px 10px 5px rgba(0, 0, 0, 0.2);
+.send-picture-text {
+  text-align: center;
   font-size: rem(20px);
-
-  a {
-    color:#FFF;
-    text-decoration: none;
-    margin-bottom: rem(30px);
-    display: inline-block;
-    font-size: rem(16px);
-    font-family: NotoSansMonoCJKkr-Regular;
-  }
-
-  p {
-    margin:0;
-    font-family: NotoSansCJKkr-Bold;
-  }
-
-  &.image-upload {
-    background: #FFF;
-    color:#000;
-    box-shadow: 2px 2px 10px 5px rgba(0, 0, 0, 0);
-
-    a {
-      color:#000;
-    }
-  }
-}
-
-.quest-perform {
-  margin-top: rem(40px);
-
-  .description {
-    font-size: rem(24px);
-    line-height: rem(30px);
-  }
+  margin-bottom: rem(40px);
 }
 </style>

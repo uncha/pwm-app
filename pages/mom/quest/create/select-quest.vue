@@ -27,25 +27,27 @@
       >
       </quest-group-my-list>
 
-      <template v-if="totalSelectCount == 0">
-        <b-button
-          class="btn-select"
-          variant="light"
-        >
-          {{totalSelectCount}}
-          개의 퀘스트 선택
-        </b-button>
-      </template>
-      <template v-else>
-        <b-button
-          class="btn-select"
-          variant="primary"
-          @click="onSelectComplete"
-        >
-          {{totalSelectCount}}
-          개의 퀘스트 선택
-        </b-button>
-      </template>
+      <div class="button-wrap">
+        <template v-if="totalSelectCount == 0">
+          <b-button
+            class="btn-select"
+            variant="light"
+          >
+            {{totalSelectCount}}
+            개의 퀘스트 선택
+          </b-button>
+        </template>
+        <template v-else>
+          <b-button
+            class="btn-select"
+            variant="primary"
+            @click="onSelectComplete"
+          >
+            {{totalSelectCount}}
+            개의 퀘스트 선택
+          </b-button>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -100,9 +102,17 @@ export default {
   margin-top: rem(77px);
 }
 
-.btn-select {
-  margin-bottom: rem(54px);
-  margin-top: rem(54px);
+.button-wrap {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  padding: rem(30px);
+  padding-bottom: rem(45px);
+  z-index: 99;
+  .btn-select {
+  }
 }
 
 .quest-list-wrap {
@@ -136,6 +146,7 @@ export default {
 
 <style lang="scss">
 #select-quest {
+  padding-bottom: rem(130px);
   .tab-content {
     display: block;
     height: calc(100vh - 16rem);

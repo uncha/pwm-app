@@ -1,5 +1,5 @@
 <template>
-  <div id="side-bar">
+  <div id="side-bar-mom">
     <b-button
       v-b-toggle.sidebar-right
       variant="white"
@@ -11,84 +11,93 @@
       id="sidebar-right"
       right
       shadow
+      no-header
     >
-      <div class="sidebar-right-cont">
-        <div class="profile text-center">
-          <div class="profile-image">
-            <div
-              :style="{'background':`url(${getProfileImageURL(userProfile.profile_image)})`}"
-              style="background-size:cover !important; width:100%; height:100%; border-radius:100%"
-            >
-            </div>
-            <!-- <img
+      <template #default="{ hide }">
+        <a
+          href="#"
+          @click.prevent="hide"
+          class="btn-sidebar-close"
+        >
+          <img src="/images/btn-sidebar-close.svg" /></a>
+        <div class="sidebar-right-cont">
+          <div class="profile text-center">
+            <div class="profile-image">
+              <div
+                :style="{'background':`url(${getProfileImageURL(userProfile.profile_image)})`}"
+                style="background-size:cover !important; width:100%; height:100%; border-radius:100%"
+              >
+              </div>
+              <!-- <img
             :src=""
             class=""
           /> -->
-          </div>
-          <p class="label">닉네임</p>
-          <p class="nick-name">{{userProfile.nick_name}}</p>
-          <div class="buttons">
-            <b-button
-              variant="light"
-              class="pt-0 pb-0"
-              @click="logout"
-            >로그아웃</b-button>
-            <b-button
-              variant="light"
-              class="pt-0 pb-0"
-              @click="$refs['modify-modal'].show()"
-            >수정</b-button>
-          </div>
-        </div>
-        <div class="divine"></div>
-        <div class="linked-list">
-          <ul>
-            <li v-for="(link, i) in links">
-              <b-row>
-                <b-col cols="2">
-                  <div class="profile-image children">
-                    <div
-                      style="background-size:cover; width:100%; height:100%;"
-                      :style="{'background':`url(${getProfileImageURL(link.profile_image)})`}"
-                    >
-                    </div>
-                  </div>
-                </b-col>
-                <b-col cols="6">
-                  <p class="label">{{getLinkStatusLabel(link.status)}}</p>
-                  <p class="nick-name">{{link.baby_nick_names}}</p>
-                </b-col>
-                <b-col cols="4">
-                  <b-button
-                    variant="light"
-                    class="pt-0 pb-0"
-                    v-if="link.status == 1"
-                    @click="disconnection(link)"
-                  >연결 해제</b-button>
-                </b-col>
-              </b-row>
-            </li>
-            <li>
+            </div>
+            <p class="label">닉네임</p>
+            <p class="nick-name">{{userProfile.nick_name}}</p>
+            <div class="buttons">
+              <b-button
+                variant="light"
+                class="pt-0 pb-0"
+                @click="logout"
+              >로그아웃</b-button>
               <b-button
                 variant="primary"
-                class="add-chilren pt-0 pb-0"
-                @click="$router.push({path:'/mom/search-baby'})"
-              >자녀 추가하기</b-button>
-            </li>
-          </ul>
-        </div>
-        <div class="footer-cont">
-          <p class="text-right version">버전정보 1.00</p>
-          <hr />
-          <div class="info">
-            <p class="company mb-0">㈜엑스티</p>
-            <p class="details">서울시 관악구 남부순환로 1531, 2층<br />
-              사업자등록번호 822-88-00882<br />
-              대표 김현수, 송의택<br />
-              TEL 02-853-6582</p>
+                class="pt-0 pb-0"
+                @click="$refs['modify-modal'].show()"
+              >정보수정</b-button>
+            </div>
+          </div>
+          <div class="divine"></div>
+          <div class="linked-list">
+            <ul>
+              <li v-for="(link, i) in links">
+                <b-row>
+                  <b-col cols="2">
+                    <div class="profile-image children">
+                      <div
+                        style="background-size:cover; width:100%; height:100%;"
+                        :style="{'background':`url(${getProfileImageURL(link.profile_image)})`}"
+                      >
+                      </div>
+                    </div>
+                  </b-col>
+                  <b-col cols="6">
+                    <p class="label">{{getLinkStatusLabel(link.status)}}</p>
+                    <p class="nick-name">{{link.baby_nick_names}}</p>
+                  </b-col>
+                  <b-col cols="4">
+                    <b-button
+                      variant="light"
+                      class="pt-0 pb-0"
+                      v-if="link.status == 1"
+                      @click="disconnection(link)"
+                    >연결 해제</b-button>
+                  </b-col>
+                </b-row>
+              </li>
+              <!-- <li>
+                <b-button
+                  variant="primary"
+                  class="add-chilren pt-0 pb-0"
+                  @click="$router.push({path:'/mom/search-baby'})"
+                >자녀 추가하기</b-button>
+              </li> -->
+            </ul>
+          </div>
+          <div class="footer-cont">
+            <p class="text-right version">버전정보 1.00</p>
+            <!-- <hr /> -->
+            <!-- <div class="info">
+              <p class="company mb-0">㈜엑스티</p>
+              <p class="details">서울시 관악구 남부순환로 1531, 2층<br />
+                사업자등록번호 822-88-00882<br />
+                대표 김현수, 송의택<br />
+                TEL 02-853-6582</p>
+            </div> -->
           </div>
         </div>
-      </div>
+      </template>
     </b-sidebar>
 
     <b-modal
@@ -99,10 +108,11 @@
       centered
     >
       <div class="profile text-center">
-        <img
-          :src="getProfileImageURL(form.profile_image_url)"
+        <div
           class="profile-image"
-        />
+          :style="{'background':`url(${getProfileImageURL(form.profile_image_url)})`}"
+        >
+        </div>
         <div class="profile-image-wrapper">
           <div class="box-file-input"><label>
               <b-form-group :label="''">
@@ -115,7 +125,7 @@
                 ></b-form-file>
               </b-form-group>
             </label>
-            <p>
+            <p class="mt-2">
               사진등록
             </p>
           </div>
@@ -166,9 +176,22 @@ export default {
     authUser() {
       return this.$store.getters["authUser"];
     },
+    list() {
+      return this.links.slice(0, 2);
+    },
   },
+  watch: {},
   mounted() {
     this.init();
+
+    setTimeout(() => {
+      this.nickName = this.list[0].baby_nick_name;
+
+      _.forEach(this.list, async (item, i) => {
+        let baby = await this.loadBaby(item);
+        this.$set(item, "profile_image", baby[0].profile_image);
+      });
+    }, 1000);
   },
   methods: {
     init() {
@@ -198,6 +221,13 @@ export default {
         w.close();
         this.$router.push({ path: "/" });
       }, 100);
+    },
+    loadBaby(baby) {
+      return new Promise((resolve) => {
+        this.$axios.get(`/api/user/${baby.baby_nick_names}`).then((res) => {
+          resolve(res.data);
+        });
+      });
     },
     onUploadImage() {
       let formData = new FormData();
@@ -250,6 +280,7 @@ export default {
     height: 80px;
     border-radius: 100%;
     margin: 0 auto;
+    background-size: cover !important;
 
     &.children {
       width: 48px;
@@ -257,9 +288,16 @@ export default {
     }
   }
 
+  .modal-header {
+    .close {
+      display: none;
+    }
+  }
+
   .profile-image-wrapper {
     position: relative;
-    margin: 2.625rem auto 10.0625rem;
+    margin: 0 auto;
+    top: rem(-80px);
 
     .box-file-input {
       position: absolute;
@@ -279,17 +317,21 @@ export default {
       color: #fff;
       cursor: pointer;
       border-radius: 100%;
+      position: relative;
+      right: -25px;
+      bottom: -12px;
     }
 
     .box-file-input label:after {
-      background-size: rem(64px) rem(64px);
       display: inline-block;
       background-position: 0 0;
       background-repeat: no-repeat;
-      width: rem(64px);
-      height: rem(59px);
+      width: rem(28px) !important;
+      height: rem(24px) !important;
       content: "";
-      background-image: url(/images/icon_camera_02.png);
+      background-image: url(/images/icon-camera.svg) !important;
+      background-size: 60% !important;
+      background-position: rem(6.5px) rem(6.5px) !important;
     }
 
     .box-file-input input[type="file"] {
@@ -303,21 +345,25 @@ export default {
   }
 }
 
-#side-bar {
+#side-bar-mom {
+  .btn {
+    line-height: rem(36px) !important;
+    border-radius: rem(12px) !important;
+  }
   .btn-toggle {
     position: fixed;
-    top: rem(40px);
+    top: rem(39px);
     right: rem(12px);
     width: auto;
   }
 
   .b-sidebar-header {
     position: absolute;
-    top: rem(15px);
+    top: rem(24px);
     right: rem(5px);
 
     .close {
-      color: #000 !important;
+      color: red !important;
     }
   }
 }
@@ -326,9 +372,15 @@ export default {
   width: 100%;
   background: #fff !important;
 
+  .btn-sidebar-close {
+    position: absolute;
+    right: rem(20px);
+    top: rem(45px);
+  }
+
   .sidebar-right-cont {
     padding: 24px;
-    padding-top: 70px;
+    padding-top: rem(100px);
   }
 
   .profile-image {

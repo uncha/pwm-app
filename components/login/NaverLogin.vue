@@ -1,13 +1,11 @@
 <template>
-    <div id="naverIdLogin"></div>
+  <div id="naverIdLogin"></div>
 </template>
 
 <script>
-
 export default {
-  name: 'NaverLogin',
-  components: {
-  },
+  name: "NaverLogin",
+  components: {},
   mounted() {
     console.log(this.$router.options.routes);
 
@@ -16,16 +14,14 @@ export default {
       callbackUrl: `${window.location.origin}/callback/Naver`,
       isPopup: false,
       loginButton: {
-        color: 'green',
+        color: "green",
         type: 3,
-        height: 48
+        height: 48,
       },
     });
 
     naverLogin.init();
-
   },
-  methods: {
-  }
-}
+  methods: {},
+};
 </script>
